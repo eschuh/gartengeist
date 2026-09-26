@@ -45,11 +45,11 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ### Bepflanzung (`bepflanzung`)
 - `id`, `flaecheId`, `pflanzeId`
-- `sorte`, `anzahl`
+- `sorte`, `anzahl` (Pflanzen), `reihen`
 - `aussaatDatum`, `pflanzDatum`
 - `voraussichtlicheErnte` (berechnet aus Datum + Kulturdauer)
 - `notizen`, `beendetAm` (abgeräumt; bleibt für Fruchtfolge erhalten), `angelegtVon`
-- Teilweise abräumen: Kultur wird aufgeteilt (abgeräumter Teil als beendete Kultur, Rest bleibt stehen)
+- Teilweise abräumen (nach Reihen oder Pflanzen): Kultur wird aufgeteilt (abgeräumter Teil als beendete Kultur, Rest bleibt stehen)
 
 ### Tagebuch (`tagebuch_eintrag`, `tagebuch_foto`)
 - `id`, `nutzerId`, `datum`, `typ` (notiz | gegossen | geduengt | gejaetet | geerntet)
