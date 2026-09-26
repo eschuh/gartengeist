@@ -46,8 +46,20 @@ builder.Services.AddAuthorizationBuilder()
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IGardenRepository, GardenRepository>();
+builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IGardenService, GardenService>();
+builder.Services.AddScoped<IAreaService, AreaService>();
+builder.Services.AddSingleton<GeocodingService>();
+
+builder.Services.AddHttpClient("nominatim", c =>
+{
+    c.BaseAddress = new Uri("https://nominatim.openstreetmap.org/");
+    c.Timeout = TimeSpan.FromSeconds(10);
+    c.DefaultRequestHeaders.UserAgent.TryParseAdd("Gartengeist/1.0 (private garden app)");
+});
 
 builder.Services.AddControllers();
 

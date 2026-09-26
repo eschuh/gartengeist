@@ -15,6 +15,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 | Datenbank | PostgreSQL + pgvector (für RAG/Embeddings) |
 | KI | Claude API (Chat, Analyse, Planung) |
 | Wetter | Open-Meteo API (kostenlos, kein API-Key) |
+| Ortssuche | Nominatim/OpenStreetMap (PLZ → Koordinaten; Open-Meteo-Geocoding findet PLZ unzuverlässig) |
 | Fotos | Lokaler Upload → Dateisystem oder Blob-Storage |
 | Auth | JWT-basiert, zwei Nutzer-Accounts |
 
@@ -98,8 +99,8 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 ### Phase 1 — Grundstruktur (Woche 1–2)
 - [x] Projekt-Setup: Backend (ASP.NET), Frontend (React), Postgres, Docker Compose
 - [x] Auth: Registrierung, Login, JWT
-- [ ] Einrichtungs-Wizard: Standort, Flächen anlegen, Haushaltsgröße
-- [ ] Flächen-Verwaltung (CRUD)
+- [x] Einrichtungs-Wizard: Standort, Flächen anlegen, Haushaltsgröße
+- [x] Flächen-Verwaltung (CRUD)
 - [ ] Pflanzen-Katalog (Basis-Daten mit ~50 Gemüse/Kräuter, inkl. Saatgut-Scanner via Foto)
 - [ ] Bepflanzung anlegen (was steht wo, Aussaat-/Pflanzungsdatum)
 - [x] Mobile Navigation (Bottom-Nav)
@@ -188,4 +189,4 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ## Nächster Schritt
 
-Einrichtungs-Wizard (Standort, Flächen, Haushaltsgröße) und Flächen-Verwaltung.
+Pflanzen-Katalog (~50 Gemüse/Kräuter als Seed-Daten) und Bepflanzung anlegen.

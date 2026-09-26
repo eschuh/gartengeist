@@ -1,11 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
+import { inputClass, primaryButtonClass } from '../components/styles'
 
 type Mode = 'login' | 'register'
-
-const inputClass =
-  'min-h-12 w-full rounded-xl border border-border bg-bg px-4 text-base text-heading outline-none focus:border-accent'
 
 export default function LoginPage() {
   const { user, login, register } = useAuth()
@@ -86,7 +84,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 min-h-12 rounded-xl bg-accent-strong text-base font-semibold text-white disabled:opacity-60 dark:text-black"
+          className={`${primaryButtonClass} mt-2`}
         >
           {submitting ? '…' : mode === 'login' ? 'Anmelden' : 'Registrieren'}
         </button>
