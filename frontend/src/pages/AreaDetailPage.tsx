@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { api } from '../api/client'
 import type { Planting } from '../api/plants'
 import { areaTypeLabel, formatAreaSize, type Area } from '../api/types'
+import AreaJournal from '../components/AreaJournal'
 import PlantingCard from '../components/PlantingCard'
 import { primaryButtonClass } from '../components/styles'
 
@@ -56,6 +57,8 @@ export default function AreaDetailPage() {
         {area.description && <p className="mt-2 text-sm">{area.description}</p>}
         {area.archivedAt && <p className="mt-2 text-sm text-danger">Diese Fläche ist archiviert.</p>}
       </div>
+
+      {!area.archivedAt && <AreaJournal areaId={area.id} />}
 
       <div>
         <h2 className="mb-3 font-semibold text-heading">Was wächst hier</h2>

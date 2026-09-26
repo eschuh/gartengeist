@@ -10,6 +10,9 @@ import CatalogPage from './pages/CatalogPage'
 import DashboardPage from './pages/DashboardPage'
 import GardenPage from './pages/GardenPage'
 import GardenSettingsPage from './pages/GardenSettingsPage'
+import HarvestPage from './pages/HarvestPage'
+import JournalEntryFormPage from './pages/JournalEntryFormPage'
+import JournalPage from './pages/JournalPage'
 import LoginPage from './pages/LoginPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 import PlantDetailPage from './pages/PlantDetailPage'
@@ -37,10 +40,10 @@ export default function App() {
                   <Route path="garten/bepflanzungen/:id" element={<PlantingFormPage />} />
                   <Route path="garten/katalog" element={<CatalogPage />} />
                   <Route path="garten/katalog/:id" element={<PlantDetailPage />} />
-                  <Route
-                    path="tagebuch"
-                    element={<PlaceholderPage title="Tagebuch" description="Einträge, Fotos und Ernte-Log – Phase 2." />}
-                  />
+                  <Route path="tagebuch" element={<JournalPage />} />
+                  <Route path="tagebuch/neu" element={<JournalEntryFormPage />} />
+                  <Route path="tagebuch/ernte" element={<HarvestPage />} />
+                  <Route path="tagebuch/:id" element={<JournalEntryFormPage />} />
                   <Route
                     path="aufgaben"
                     element={<PlaceholderPage title="Aufgaben" description="Aufgaben und Kalender – Phase 3." />}

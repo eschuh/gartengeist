@@ -51,12 +51,15 @@ builder.Services.AddScoped<IGardenRepository, GardenRepository>();
 builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IPlantingRepository, PlantingRepository>();
+builder.Services.AddScoped<IJournalRepository, JournalRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IGardenService, GardenService>();
 builder.Services.AddScoped<IAreaService, AreaService>();
 builder.Services.AddScoped<IPlantService, PlantService>();
 builder.Services.AddScoped<IPlantingService, PlantingService>();
+builder.Services.AddScoped<IJournalService, JournalService>();
+builder.Services.AddSingleton<PhotoStorage>();
 builder.Services.AddSingleton<GeocodingService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddSingleton<IWeatherProvider, OpenMeteoWeatherProvider>();

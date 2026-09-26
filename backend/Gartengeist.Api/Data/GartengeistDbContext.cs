@@ -11,11 +11,16 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
     public DbSet<Area> Areas => Set<Area>();
     public DbSet<Plant> Plants => Set<Plant>();
     public DbSet<Planting> Plantings => Set<Planting>();
+    public DbSet<JournalEntry> JournalEntries => Set<JournalEntry>();
+    public DbSet<JournalPhoto> JournalPhotos => Set<JournalPhoto>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<AreaType>()
             .HaveConversion<AreaTypeConverter>();
+
+        configurationBuilder.Properties<JournalEntryType>()
+            .HaveConversion<JournalEntryTypeConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,8 +55,28 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
             planting.HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
             planting.HasIndex(p => new { p.AreaId, p.EndedOn });
         });
+
+        modelBuilder.Entity<JournalEntry>(entry =>
+        {
+            entry.HasOne(e => e.Area).WithMany().HasForeignKey(e => e.AreaId).OnDelete(DeleteBehavior.Restrict);
+            entry.HasOne(e => e.Planting).WithMany().HasForeignKey(e => e.PlantingId).OnDelete(DeleteBehavior.Restrict);
+            entry.HasOne(e => e.User).WithMany().HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
+            entry.HasMany(e => e.Photos).WithOne().HasForeignKey(p => p.EntryId).OnDelete(DeleteBehavior.Cascade);
+            entry.Property(e => e.Amount).HasPrecision(9, 3);
+            entry.Property(e => e.WeatherTempMin).HasPrecision(4, 1);
+            entry.Property(e => e.WeatherTempMax).HasPrecision(4, 1);
+            entry.Property(e => e.WeatherPrecipitationMm).HasPrecision(5, 1);
+            entry.HasIndex(e => e.Date);
+            entry.HasIndex(e => new { e.AreaId, e.Type, e.Date });
+            entry.HasIndex(e => e.PlantingId);
+        });
     }
 }
+
+file sealed class JournalEntryTypeConverter()
+    : ValueConverter<JournalEntryType, string>(
+        v => v.ToString().ToLowerInvariant(),
+        v => Enum.Parse<JournalEntryType>(v, true));
 
 file sealed class AreaTypeConverter()
     : ValueConverter<AreaType, string>(

@@ -50,12 +50,12 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - `voraussichtlicheErnte` (berechnet aus Datum + Kulturdauer)
 - `notizen`, `beendetAm` (abgeerntet; bleibt für Fruchtfolge erhalten), `angelegtVon`
 
-### Tagebuch (`journal_entries`)
-- `id`, `userId`, `datum`
-- `titel`, `text`
-- `areaId?`, `plantingId?`
-- `fotos[]` (Pfade)
-- `wetterSnapshot` (Temp, Niederschlag)
+### Tagebuch (`tagebuch_eintrag`, `tagebuch_foto`)
+- `id`, `nutzerId`, `datum`, `typ` (notiz | gegossen | geduengt | geerntet)
+- `text`, `flaecheId?`, `bepflanzungId?`
+- `menge`, `einheit` (kg | g | stueck | bund) – nur bei `geerntet`
+- Fotos als eigene Tabelle (max. 5 pro Eintrag, Dateien unter `uploads/fotos`)
+- Wetter-Snapshot (Temp min/max, Niederschlag, Wettercode) aus der Tagesprognose
 
 ### Aufgaben (`tasks`)
 - `id`, `titel`, `beschreibung`
@@ -79,10 +79,9 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - `embedding` (vector, für spätere RAG-Abfragen)
 - Wird automatisch bei jeder KI-Antwort gespeichert
 
-### Ernte-Log (`harvest_logs`)
-- `id`, `plantingId`, `userId`, `datum`
-- `menge`, `einheit` (kg | stück | bund)
-- `notizen`
+### Ernte-Log
+- Keine eigene Tabelle: Ernten sind Tagebucheinträge vom Typ `geerntet` (mit Kultur, Menge, Einheit, Person, Fotos)
+- Saison-Summen werden daraus berechnet (`GET /api/tagebuch/ernte?jahr=`)
 
 ### Einkaufsliste (`shopping_items`)
 - `id`, `name`, `menge`, `einheit`
@@ -108,13 +107,14 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [x] Dashboard: 7-Tage-Wetter, Frostwarnung mit betroffenen Kulturen, nächste Ernte, „Jetzt dran“ (Aufgaben kommen mit Phase 3 dazu)
 
 ### Phase 2 — Tagebuch & Fotos (Woche 3)
-- [ ] Tagebucheinträge erstellen mit Datum, Text, Fläche/Pflanze
-- [ ] Foto-Upload (Kamera auf Handy, max 5 Fotos/Eintrag)
-- [ ] Schnell-Aktionen: „gegossen", „gedüngt", „geerntet" per 1 Tap
-- [ ] Ernte-Log: Menge erfassen (kg/Stück), Saison-Summe pro Pflanze
-- [ ] Einträge nach Datum und Fläche filtern
-- [ ] Wer hat was eingetragen (Nutzername + Avatar)
-- [ ] Foto-Verlauf pro Pflanze (Entwicklung über Zeit)
+- [x] Tagebucheinträge erstellen mit Datum, Text, Fläche/Pflanze
+- [x] Foto-Upload (Kamera/Galerie auf Handy, max 5 Fotos/Eintrag, vor Upload auf 2000 px verkleinert)
+- [x] Schnell-Aktionen: „gegossen", „gedüngt" per 1 Tap auf der Fläche (mehrere Flächen über Tagebuch), mit Rückgängig; „geerntet" mit Menge
+- [x] Ernte-Log: Menge erfassen (kg/g/Stück/Bund), Saison-Summe pro Kultur, Jahresübersicht
+- [x] Einträge nach Fläche und Typ filtern (zeitlich gruppiert)
+- [x] Wer hat was eingetragen (Nutzername + Avatar)
+- [x] Foto-Verlauf pro Kultur (Entwicklung über Zeit)
+- [x] Wetter-Snapshot bei Tagebucheintrag (aus der Tagesprognose)
 
 ### Phase 3 — Aufgaben & Kalender (Woche 4)
 - [ ] Aufgaben erstellen (manuell, wiederkehrend)
@@ -130,7 +130,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [ ] Historische Daten (Open-Meteo Archive)
 - [ ] Optional: echte Messwerte der nächsten MeteoSchweiz-Station (Open Government Data, STAC-API `ch.meteoschweiz.ogd-smn`) für Wetterrückblick und Jahresvergleich
 - [x] Wetter-Widget auf Dashboard
-- [ ] Wetter-Snapshot bei Tagebucheintrag
+- [ ] Wetter-Snapshot bei Tagebucheintrag: für nachgetragene Einträge (vergangene Tage) Messwerte statt Prognose
 - [ ] Automatische Aufgabe bei Frost-Warnung
 - [ ] Wetterrückblick: was wirklich war vs. Vorhersage
 - [ ] Jahresvergleich: „Diese Woche letztes Jahr..."
@@ -193,4 +193,4 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ## Nächster Schritt
 
-Phase 1 ist abgeschlossen. Weiter mit Phase 2: Tagebuch mit Fotos, Schnell-Aktionen (gegossen/gedüngt/geerntet), Ernte-Log.
+Phase 1 und 2 sind abgeschlossen. Weiter mit Phase 3: Aufgaben (manuell, wiederkehrend), Kalender, Gießprotokoll mit Warnung, Voranzucht-Reminder, Einkaufsliste & Vorrat, Wintervorbereitung.

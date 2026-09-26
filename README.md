@@ -31,6 +31,10 @@ Der Dev-Server ist im WLAN erreichbar, zum Testen auf dem Handy die „Network�
 
 Die ersten zwei Registrierungen legen die Accounts an, danach ist die Registrierung gesperrt (`Auth:MaxNutzer` in `appsettings.json`).
 
+## Fotos
+
+Fotos liegen unter `backend/Gartengeist.Api/uploads/fotos` (konfigurierbar über `Uploads:Path`) und sind nicht im Git. Beim Sichern die Datenbank **und** diesen Ordner mitnehmen.
+
 ## Migrationen
 
 ```sh

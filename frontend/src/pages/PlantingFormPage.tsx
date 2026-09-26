@@ -13,6 +13,7 @@ import {
 } from '../api/plants'
 import { areaSizeM2, type Area } from '../api/types'
 import { useCatalog } from '../api/useCatalog'
+import PlantingHistory from '../components/PlantingHistory'
 import PlantPicker from '../components/PlantPicker'
 import { inputClass, labelClass, primaryButtonClass, secondaryButtonClass } from '../components/styles'
 
@@ -177,6 +178,8 @@ export default function PlantingFormPage() {
           </button>
         )}
       </div>
+
+      {existing && <PlantingHistory plantingId={existing.id} />}
 
       <div className="mb-5 flex flex-col gap-2">
         {companions.bad.length > 0 && (
