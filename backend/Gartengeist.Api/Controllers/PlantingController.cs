@@ -62,7 +62,7 @@ public class PlantingController(IPlantingService plantingService) : ControllerBa
         if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)) return Unauthorized();
         try
         {
-            var result = await plantingService.EndAsync(id, request?.EndedOn, request?.Count, userId);
+            var result = await plantingService.EndAsync(id, request?.EndedOn, request?.Count, request?.Rows, userId);
             return result is null
                 ? NotFound()
                 : Ok(new EndPlantingResponse(
@@ -88,6 +88,7 @@ public class PlantingController(IPlantingService plantingService) : ControllerBa
         planting.Plant.Name,
         planting.Variety,
         planting.Count,
+        planting.Rows,
         planting.SowingDate,
         planting.PlantingDate,
         planting.ExpectedHarvest,

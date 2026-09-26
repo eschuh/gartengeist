@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { formatDate, type Planting } from '../api/plants'
+import { formatDate, formatQuantity, type Planting } from '../api/plants'
 import UserAvatar from './UserAvatar'
 
 interface PlantingCardProps {
@@ -10,7 +10,7 @@ interface PlantingCardProps {
 
 export default function PlantingCard({ planting, onClear }: PlantingCardProps) {
   const details = [
-    planting.count != null && `${planting.count} Stk.`,
+    formatQuantity(planting),
     planting.endedOn
       ? `abgeräumt ${formatDate(planting.endedOn)}`
       : planting.expectedHarvest && `Ernte ab ca. ${formatDate(planting.expectedHarvest)}`,

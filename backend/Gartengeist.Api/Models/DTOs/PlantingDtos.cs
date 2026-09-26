@@ -7,13 +7,15 @@ public record PlantingRequest(
     [Required] Guid PlantId,
     [MaxLength(100)] string? Variety,
     [Range(1, 10000)] int? Count,
+    [Range(1, 1000)] int? Rows,
     DateOnly? SowingDate,
     DateOnly? PlantingDate,
     [MaxLength(2000)] string? Notes
 );
 
-// Count gesetzt und kleiner als die Anzahl der Kultur = nur teilweise abräumen
-public record EndPlantingRequest(DateOnly? EndedOn, [Range(1, 10000)] int? Count);
+// Teilweise abräumen: Rows (Reihen) oder Count (Pflanzen) kleiner als bei der Kultur.
+// Bei Reihen wird eine bekannte Pflanzenzahl anteilig mit aufgeteilt.
+public record EndPlantingRequest(DateOnly? EndedOn, [Range(1, 10000)] int? Count, [Range(1, 1000)] int? Rows);
 
 public record EndPlantingResponse(PlantingResponse Ended, PlantingResponse? Remaining, bool AreaFree);
 
@@ -25,6 +27,7 @@ public record PlantingResponse(
     string PlantName,
     string? Variety,
     int? Count,
+    int? Rows,
     DateOnly? SowingDate,
     DateOnly? PlantingDate,
     DateOnly? ExpectedHarvest,

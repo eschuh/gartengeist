@@ -101,6 +101,7 @@ export interface Planting {
   plantName: string
   variety: string | null
   count: number | null
+  rows: number | null
   sowingDate: string | null
   plantingDate: string | null
   expectedHarvest: string | null
@@ -117,12 +118,33 @@ export interface EndPlantingResult {
   areaFree: boolean
 }
 
-// Ganz abräumen (count leer) oder nur einen Teil der Pflanzen
-export function endPlanting(id: string, endedOn: string, count: number | null): Promise<EndPlantingResult> {
+// Ganz abräumen (ohne part) oder nur einen Teil – nach Reihen oder nach Pflanzen
+export function endPlanting(
+  id: string,
+  endedOn: string,
+  part: { rows: number } | { count: number } | null,
+): Promise<EndPlantingResult> {
   return api<EndPlantingResult>(`/api/bepflanzungen/${id}/beenden`, {
     method: 'POST',
-    body: JSON.stringify({ endedOn, count }),
+    body: JSON.stringify({ endedOn, ...part }),
   })
+}
+
+// Belegte Fläche einer Kultur in m²: Reihen × Reihenabstand × lange Beetseite, sonst Pflanzen × Platzbedarf
+// (muss zu RecommendationService.EstimateFreeSpace im Backend passen)
+export function usedAreaM2(planting: Planting, plant: Plant | undefined, areaLongSide: number | null): number | null {
+  if (planting.rows != null && plant?.rowSpacingCm != null && areaLongSide != null)
+    return planting.rows * (plant.rowSpacingCm / 100) * areaLongSide
+  if (planting.count != null && plant?.spacePerPlantM2 != null) return planting.count * plant.spacePerPlantM2
+  return null
+}
+
+export function formatQuantity(planting: Pick<Planting, 'count' | 'rows'>): string | null {
+  const parts = [
+    planting.rows != null && `${planting.rows} ${planting.rows === 1 ? 'Reihe' : 'Reihen'}`,
+    planting.count != null && `${planting.count} Stk.`,
+  ].filter(Boolean)
+  return parts.length > 0 ? parts.join(' · ') : null
 }
 
 export interface NextCropRecommendation {
@@ -147,6 +169,7 @@ export interface PlantingInput {
   plantId: string
   variety: string | null
   count: number | null
+  rows: number | null
   sowingDate: string | null
   plantingDate: string | null
   notes: string | null

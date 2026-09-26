@@ -155,14 +155,22 @@ public class RecommendationService(
             Hint: hint);
     }
 
+    // Belegung je Kultur: Reihen × Reihenabstand × lange Beetseite (Reihen laufen entlang der langen Seite),
+    // sonst Pflanzen × Pflanzabstand × Reihenabstand. Reihen zuerst, weil sie die tatsächlich belegte Fläche
+    // besser beschreiben (120 Möhren in 4 Reihen belegen die ganze Beetlänge). Ist beides unbekannt, keine Schätzung.
     private static decimal? EstimateFreeSpace(Area area, List<Planting> active)
     {
         if (area.Width is not { } width || area.Length is not { } length) return null;
+        var longSide = Math.Max(width, length);
         decimal used = 0;
         foreach (var planting in active)
         {
-            if (planting is not { Count: { } count, Plant: { PlantSpacingCm: { } spacing, RowSpacingCm: { } row } }) return null;
-            used += count * spacing * row / 10000m;
+            if (planting is { Rows: { } rows, Plant.RowSpacingCm: { } rowSpacing })
+                used += rows * rowSpacing / 100m * longSide;
+            else if (planting is { Count: { } count, Plant: { PlantSpacingCm: { } spacing, RowSpacingCm: { } row } })
+                used += count * spacing * row / 10000m;
+            else
+                return null;
         }
         return Math.Round(Math.Max(0, width * length - used), 1);
     }

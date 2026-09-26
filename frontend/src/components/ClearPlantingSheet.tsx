@@ -8,12 +8,15 @@ interface ClearPlantingSheetProps {
   onClose: () => void
 }
 
-// Kultur abräumen – ganz oder (bei mehreren Pflanzen) nur einen Teil
+// Kultur abräumen – ganz oder nur einen Teil. Sind Reihen eingetragen, wird nach Reihen aufgeteilt
+// (eine bekannte Pflanzenzahl teilt das Backend anteilig mit auf), sonst nach Pflanzen.
 export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearPlantingSheetProps) {
-  const total = planting.count ?? 0
+  const byRows = (planting.rows ?? 0) > 1
+  const total = byRows ? planting.rows! : (planting.count ?? 0)
+  const unit = byRows ? 'Reihen' : 'Pflanzen'
   const canSplit = total > 1
   const [partial, setPartial] = useState(false)
-  const [count, setCount] = useState(Math.max(1, Math.floor(total / 2)))
+  const [amount, setAmount] = useState(Math.max(1, Math.floor(total / 2)))
   const [date, setDate] = useState(todayIso())
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -21,8 +24,9 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
   async function save() {
     setSaving(true)
     setError(null)
+    const part = !partial ? null : byRows ? { rows: amount } : { count: amount }
     try {
-      onDone(await endPlanting(planting.id, date, partial ? count : null))
+      onDone(await endPlanting(planting.id, date, part))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Abräumen fehlgeschlagen')
       setSaving(false)
@@ -54,7 +58,7 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
         {canSplit && (
           <div className="grid grid-cols-2 gap-2">
             <button type="button" className={choice(!partial)} onClick={() => setPartial(false)}>
-              Alle {total} Pflanzen
+              Alle {total} {unit}
             </button>
             <button type="button" className={choice(partial)} onClick={() => setPartial(true)}>
               Nur ein Teil
@@ -64,14 +68,16 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
 
         {partial && (
           <div className="flex items-center justify-center gap-5">
-            <button type="button" className={stepButton} onClick={() => setCount((c) => c - 1)} disabled={count <= 1} aria-label="Weniger">
+            <button type="button" className={stepButton} onClick={() => setAmount((a) => a - 1)} disabled={amount <= 1} aria-label="Weniger">
               −
             </button>
             <span className="w-28 text-center">
-              <span className="block text-3xl font-semibold text-heading">{count}</span>
-              <span className="text-sm">von {total} Pflanzen</span>
+              <span className="block text-3xl font-semibold text-heading">{amount}</span>
+              <span className="text-sm">
+                von {total} {unit}
+              </span>
             </span>
-            <button type="button" className={stepButton} onClick={() => setCount((c) => c + 1)} disabled={count >= total - 1} aria-label="Mehr">
+            <button type="button" className={stepButton} onClick={() => setAmount((a) => a + 1)} disabled={amount >= total - 1} aria-label="Mehr">
               +
             </button>
           </div>
@@ -84,14 +90,14 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
           <input id="cleared-on" type="date" className={inputClass} value={date} max={todayIso()} onChange={(e) => setDate(e.target.value)} />
         </div>
 
-        {!canSplit && planting.count == null && (
-          <p className="text-xs">Tipp: Mit eingetragener Anzahl Pflanzen lässt sich auch nur ein Teil abräumen.</p>
+        {!canSplit && (
+          <p className="text-xs">Tipp: Mit eingetragener Anzahl Reihen oder Pflanzen lässt sich auch nur ein Teil abräumen.</p>
         )}
 
         {error && <p className="text-sm text-danger">{error}</p>}
 
         <button type="button" onClick={save} disabled={saving} className={primaryButtonClass}>
-          {saving ? 'Speichert …' : partial ? `${count} Pflanzen abräumen` : 'Abräumen'}
+          {saving ? 'Speichert …' : partial ? `${amount} ${unit} abräumen` : 'Abräumen'}
         </button>
       </div>
     </div>

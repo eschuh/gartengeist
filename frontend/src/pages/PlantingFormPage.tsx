@@ -7,6 +7,7 @@ import {
   formatDate,
   inWindow,
   todayIso,
+  usedAreaM2,
   type EndPlantingResult,
   type Plant,
   type Planting,
@@ -42,6 +43,7 @@ export default function PlantingFormPage() {
   const [pickedPlant, setPickedPlant] = useState<Plant | null>(null)
   const [variety, setVariety] = useState('')
   const [count, setCount] = useState('')
+  const [rows, setRows] = useState('')
   const [sowingDate, setSowingDate] = useState(presetPlantId && presetAction === 'säen' ? todayIso() : '')
   const [plantingDate, setPlantingDate] = useState(presetPlantId && presetAction === 'pflanzen' ? todayIso() : '')
   const [notes, setNotes] = useState('')
@@ -57,6 +59,7 @@ export default function PlantingFormPage() {
         setExisting(planting)
         setVariety(planting.variety ?? '')
         setCount(planting.count?.toString() ?? '')
+        setRows(planting.rows?.toString() ?? '')
         setSowingDate(planting.sowingDate ?? '')
         setPlantingDate(planting.plantingDate ?? '')
         setNotes(planting.notes ?? '')
@@ -103,8 +106,10 @@ export default function PlantingFormPage() {
     event.preventDefault()
     if (!plant || !area) return
     const parsedCount = count.trim() ? Number(count) : null
-    if (parsedCount !== null && (!Number.isInteger(parsedCount) || parsedCount < 1)) {
-      setError('Anzahl bitte als ganze Zahl angeben.')
+    const parsedRows = rows.trim() ? Number(rows) : null
+    const invalid = (n: number | null) => n !== null && (!Number.isInteger(n) || n < 1)
+    if (invalid(parsedCount) || invalid(parsedRows)) {
+      setError('Reihen und Pflanzen bitte als ganze Zahl angeben.')
       return
     }
     setSaving(true)
@@ -114,6 +119,7 @@ export default function PlantingFormPage() {
       plantId: plant.id,
       variety: variety.trim() || null,
       count: parsedCount,
+      rows: parsedRows,
       sowingDate: sowingDate || null,
       plantingDate: plantingDate || null,
       notes: notes.trim() || null,
@@ -171,11 +177,23 @@ export default function PlantingFormPage() {
   const harvest = estimateHarvest(plant, sowingDate || null, plantingDate || null)
   // Platz auf dem noch freien Teil der Fläche (laufende Kulturen mit bekannter Anzahl abgezogen)
   const areaM2 = areaSizeM2(area)
+  const longSide = area.width != null && area.length != null ? Math.max(area.width, area.length) : null
   const usedM2 = others
-    .filter((p) => !p.endedOn && p.count != null)
-    .reduce((sum, p) => sum + (p.count ?? 0) * (catalog.find((c) => c.id === p.plantId)?.spacePerPlantM2 ?? 0), 0)
+    .filter((p) => !p.endedOn)
+    .reduce((sum, p) => sum + (usedAreaM2(p, catalog.find((c) => c.id === p.plantId), longSide) ?? 0), 0)
   const freeM2 = areaM2 !== null ? Math.max(0, areaM2 - usedM2) : null
   const fitsPlants = freeM2 && plant.spacePerPlantM2 ? Math.floor(freeM2 / plant.spacePerPlantM2) : null
+  // Reihen laufen entlang der langen Seite; jede belegt einen Reihenabstand
+  const fitsRows = freeM2 && longSide && plant.rowSpacingCm ? Math.floor(freeM2 / ((plant.rowSpacingCm / 100) * longSide)) : null
+  const fmtM = (n: number) => n.toLocaleString('de-DE', { maximumFractionDigits: 1 })
+  const capacity = [
+    fitsRows ? `ca. ${fitsRows} ${fitsRows === 1 ? 'Reihe' : 'Reihen'} à ${fmtM(longSide!)} m (${plant.rowSpacingCm} cm Abstand)` : null,
+    fitsPlants ? `ca. ${fitsPlants} Pflanzen` : null,
+  ].filter(Boolean)
+  const spaceHint =
+    capacity.length === 0
+      ? null
+      : `${usedM2 > 0 ? `Auf dem freien Teil (ca. ${fmtM(freeM2!)} m²)` : 'Auf der Fläche'} ist Platz für ${capacity.join(' bzw. ')}.`
 
   return (
     <section>
@@ -236,23 +254,21 @@ export default function PlantingFormPage() {
         </div>
 
         <div>
-          <label htmlFor="count" className={labelClass}>
-            Anzahl Pflanzen <span className="font-normal text-text">(optional)</span>
-          </label>
-          <input
-            id="count"
-            className={inputClass}
-            inputMode="numeric"
-            value={count}
-            onChange={(e) => setCount(e.target.value)}
-          />
-          {fitsPlants !== null && fitsPlants > 0 && (
-            <p className="mt-1 text-xs">
-              {usedM2 > 0
-                ? `Auf dem freien Teil (ca. ${freeM2!.toLocaleString('de-DE', { maximumFractionDigits: 1 })} m²) ist Platz für ca. ${fitsPlants} ${plant.name}-Pflanzen.`
-                : `Die Fläche bietet Platz für ca. ${fitsPlants} ${plant.name}-Pflanzen (bei voller Belegung).`}
-            </p>
-          )}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="rows" className={labelClass}>
+                Reihen <span className="font-normal text-text">(optional)</span>
+              </label>
+              <input id="rows" className={inputClass} inputMode="numeric" value={rows} onChange={(e) => setRows(e.target.value)} />
+            </div>
+            <div>
+              <label htmlFor="count" className={labelClass}>
+                Pflanzen <span className="font-normal text-text">(optional)</span>
+              </label>
+              <input id="count" className={inputClass} inputMode="numeric" value={count} onChange={(e) => setCount(e.target.value)} />
+            </div>
+          </div>
+          {spaceHint && <p className="mt-1 text-xs">{spaceHint}</p>}
         </div>
 
         <div className="grid grid-cols-2 gap-3">

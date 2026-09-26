@@ -32,23 +32,43 @@ public class PlantingService(
         return await plantingRepository.UpdateAsync(planting);
     }
 
-    // Abräumen – ganz oder nur ein Teil der Pflanzen. Beim Teil-Abräumen wird die Kultur aufgeteilt:
-    // der abgeräumte Teil wird als beendete Kultur gespeichert (Verlauf/Fruchtfolge), der Rest bleibt stehen.
-    public async Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, Guid userId)
+    // Abräumen – ganz oder nur ein Teil (nach Reihen oder nach Pflanzen). Beim Teil-Abräumen wird die Kultur
+    // aufgeteilt: der abgeräumte Teil wird als beendete Kultur gespeichert (Verlauf/Fruchtfolge), der Rest bleibt stehen.
+    public async Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, int? rows, Guid userId)
     {
         var planting = await plantingRepository.GetByIdAsync(id);
         if (planting is null) return null;
         if (planting.EndedOn is not null) throw new ArgumentException("Diese Kultur ist bereits abgeräumt.");
-
-        var date = endedOn ?? DateOnly.FromDateTime(DateTime.Today);
-        // Vor dem Aufteilen merken – das Repository ändert dieselbe (getrackte) Instanz
-        var totalBefore = planting.Count;
-        var partial = count is { } c && planting.Count is { } total && c < total;
+        if (rows is not null && planting.Rows is null)
+            throw new ArgumentException("Für teilweises Abräumen nach Reihen bitte zuerst die Anzahl der Reihen eintragen.");
         if (count is not null && planting.Count is null)
             throw new ArgumentException("Für teilweises Abräumen bitte zuerst die Anzahl der Pflanzen eintragen.");
 
+        var date = endedOn ?? DateOnly.FromDateTime(DateTime.Today);
+        // Vor dem Aufteilen merken – das Repository ändert dieselbe (getrackte) Instanz
+        var countBefore = planting.Count;
+        var rowsBefore = planting.Rows;
+
+        int? clearedRows = null;
+        int? clearedCount = null;
+        string? text = null;
+        if (rows is { } r && rowsBefore is { } totalRows && r < totalRows)
+        {
+            clearedRows = r;
+            // Bekannte Pflanzenzahl anteilig mitnehmen
+            if (countBefore is { } totalCount && totalCount > 1)
+                clearedCount = Math.Clamp((int)Math.Round(totalCount * (double)r / totalRows), 1, totalCount - 1);
+            text = $"{r} von {totalRows} Reihen";
+        }
+        else if (rows is null && count is { } c && countBefore is { } total && c < total)
+        {
+            clearedCount = c;
+            text = $"{c} von {total} Pflanzen";
+        }
+        var partial = text is not null;
+
         var ended = partial
-            ? await plantingRepository.SplitEndAsync(id, count!.Value, date)
+            ? await plantingRepository.SplitEndAsync(id, clearedCount, clearedRows, date)
             : await plantingRepository.EndAsync(id, date);
         var remaining = partial ? await plantingRepository.GetByIdAsync(id) : null;
         if (!partial) await taskRepository.CompleteOpenForPlantingAsync(id, userId);
@@ -60,7 +80,7 @@ public class PlantingService(
             AreaId = planting.AreaId,
             PlantingId = ended!.Id,
             UserId = userId,
-            Text = partial ? $"{count} von {totalBefore} Pflanzen" : null
+            Text = text
         });
 
         var areaFree = !(await plantingRepository.GetAllAsync(planting.AreaId, includeEnded: false)).Any();
@@ -83,6 +103,7 @@ public class PlantingService(
             PlantId = request.PlantId,
             Variety = string.IsNullOrWhiteSpace(request.Variety) ? null : request.Variety.Trim(),
             Count = request.Count,
+            Rows = request.Rows,
             SowingDate = request.SowingDate,
             PlantingDate = request.PlantingDate,
             ExpectedHarvest = EstimateHarvest(plant, request.SowingDate, request.PlantingDate),

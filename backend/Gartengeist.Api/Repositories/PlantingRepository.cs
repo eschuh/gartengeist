@@ -47,6 +47,7 @@ public class PlantingRepository(GartengeistDbContext db) : IPlantingRepository
         existing.PlantId = planting.PlantId;
         existing.Variety = planting.Variety;
         existing.Count = planting.Count;
+        existing.Rows = planting.Rows;
         existing.SowingDate = planting.SowingDate;
         existing.PlantingDate = planting.PlantingDate;
         existing.ExpectedHarvest = planting.ExpectedHarvest;
@@ -68,13 +69,17 @@ public class PlantingRepository(GartengeistDbContext db) : IPlantingRepository
         return await GetByIdAsync(id);
     }
 
-    // Teil abräumen: Anzahl der Kultur verringern und den abgeräumten Teil als eigene, beendete Kultur ablegen
-    public async Task<Planting?> SplitEndAsync(Guid id, int count, DateOnly endedOn)
+    // Teil abräumen: Pflanzen und/oder Reihen der Kultur verringern und den abgeräumten Teil
+    // als eigene, beendete Kultur ablegen
+    public async Task<Planting?> SplitEndAsync(Guid id, int? count, int? rows, DateOnly endedOn)
     {
         var planting = await db.Plantings.FindAsync(id);
-        if (planting is not { Count: { } total } || count >= total) return null;
+        if (planting is null) return null;
+        if (count is { } c && (planting.Count is not { } total || c >= total)) return null;
+        if (rows is { } r && (planting.Rows is not { } totalRows || r >= totalRows)) return null;
 
-        planting.Count = total - count;
+        if (count is { } clearedCount) planting.Count -= clearedCount;
+        if (rows is { } clearedRows) planting.Rows -= clearedRows;
         planting.UpdatedAt = DateTimeOffset.UtcNow;
 
         var ended = new Planting
@@ -84,6 +89,7 @@ public class PlantingRepository(GartengeistDbContext db) : IPlantingRepository
             PlantId = planting.PlantId,
             Variety = planting.Variety,
             Count = count,
+            Rows = rows,
             SowingDate = planting.SowingDate,
             PlantingDate = planting.PlantingDate,
             ExpectedHarvest = planting.ExpectedHarvest,

@@ -9,6 +9,6 @@ public interface IPlantingRepository
     Task<Planting> CreateAsync(Planting planting);
     Task<Planting?> UpdateAsync(Planting planting);
     Task<Planting?> EndAsync(Guid id, DateOnly endedOn);
-    Task<Planting?> SplitEndAsync(Guid id, int count, DateOnly endedOn);
+    Task<Planting?> SplitEndAsync(Guid id, int? count, int? rows, DateOnly endedOn);
     Task<bool> DeleteAsync(Guid id);
 }
