@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { endPlanting, todayIso, type EndPlantingResult, type Planting } from '../api/plants'
+import { endPlanting, formatNumber, todayIso, type EndPlantingResult, type Planting } from '../api/plants'
 import { inputClass, labelClass, primaryButtonClass } from './styles'
 
 interface ClearPlantingSheetProps {
@@ -11,12 +11,16 @@ interface ClearPlantingSheetProps {
 // Kultur abräumen – ganz oder nur einen Teil. Sind Reihen eingetragen, wird nach Reihen aufgeteilt
 // (eine bekannte Pflanzenzahl teilt das Backend anteilig mit auf), sonst nach Pflanzen.
 export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearPlantingSheetProps) {
-  const byRows = (planting.rows ?? 0) > 1
+  // Reihen in halben Schritten, Pflanzen in ganzen
+  const byRows = (planting.rows ?? 0) > 0.5
+  const step = byRows ? 0.5 : 1
   const total = byRows ? planting.rows! : (planting.count ?? 0)
   const unit = byRows ? 'Reihen' : 'Pflanzen'
-  const canSplit = total > 1
+  // Größte Teilmenge, die noch etwas stehen lässt
+  const maxAmount = Math.floor((total - 0.001) / step) * step
+  const canSplit = maxAmount >= step
   const [partial, setPartial] = useState(false)
-  const [amount, setAmount] = useState(Math.max(1, Math.floor(total / 2)))
+  const [amount, setAmount] = useState(Math.min(maxAmount, Math.max(step, Math.round(total / 2 / step) * step)))
   const [date, setDate] = useState(todayIso())
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -58,7 +62,7 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
         {canSplit && (
           <div className="grid grid-cols-2 gap-2">
             <button type="button" className={choice(!partial)} onClick={() => setPartial(false)}>
-              Alle {total} {unit}
+              Alle {formatNumber(total)} {unit}
             </button>
             <button type="button" className={choice(partial)} onClick={() => setPartial(true)}>
               Nur ein Teil
@@ -68,16 +72,16 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
 
         {partial && (
           <div className="flex items-center justify-center gap-5">
-            <button type="button" className={stepButton} onClick={() => setAmount((a) => a - 1)} disabled={amount <= 1} aria-label="Weniger">
+            <button type="button" className={stepButton} onClick={() => setAmount((a) => a - step)} disabled={amount <= step} aria-label="Weniger">
               −
             </button>
             <span className="w-28 text-center">
-              <span className="block text-3xl font-semibold text-heading">{amount}</span>
+              <span className="block text-3xl font-semibold text-heading">{formatNumber(amount)}</span>
               <span className="text-sm">
-                von {total} {unit}
+                von {formatNumber(total)} {unit}
               </span>
             </span>
-            <button type="button" className={stepButton} onClick={() => setAmount((a) => a + 1)} disabled={amount >= total - 1} aria-label="Mehr">
+            <button type="button" className={stepButton} onClick={() => setAmount((a) => a + step)} disabled={amount >= maxAmount} aria-label="Mehr">
               +
             </button>
           </div>
@@ -97,7 +101,7 @@ export default function ClearPlantingSheet({ planting, onDone, onClose }: ClearP
         {error && <p className="text-sm text-danger">{error}</p>}
 
         <button type="button" onClick={save} disabled={saving} className={primaryButtonClass}>
-          {saving ? 'Speichert …' : partial ? `${amount} ${unit} abräumen` : 'Abräumen'}
+          {saving ? 'Speichert …' : partial ? `${formatNumber(amount)} ${unit} abräumen` : 'Abräumen'}
         </button>
       </div>
     </div>

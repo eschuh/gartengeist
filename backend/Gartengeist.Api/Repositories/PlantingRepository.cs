@@ -71,7 +71,7 @@ public class PlantingRepository(GartengeistDbContext db) : IPlantingRepository
 
     // Teil abräumen: Pflanzen und/oder Reihen der Kultur verringern und den abgeräumten Teil
     // als eigene, beendete Kultur ablegen
-    public async Task<Planting?> SplitEndAsync(Guid id, int? count, int? rows, DateOnly endedOn)
+    public async Task<Planting?> SplitEndAsync(Guid id, int? count, decimal? rows, DateOnly endedOn)
     {
         var planting = await db.Plantings.FindAsync(id);
         if (planting is null) return null;

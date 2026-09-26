@@ -139,9 +139,22 @@ export function usedAreaM2(planting: Planting, plant: Plant | undefined, areaLon
   return null
 }
 
+// „1,5“ statt „1.5“
+export function formatNumber(value: number): string {
+  return value.toLocaleString('de-DE', { maximumFractionDigits: 2 })
+}
+
+// Eingabe mit Komma oder Punkt; null bei leer, NaN bei ungültig
+export function parseDecimal(text: string): number | null {
+  const normalized = text.trim().replace(',', '.')
+  if (!normalized) return null
+  const value = Number(normalized)
+  return Number.isFinite(value) ? value : NaN
+}
+
 export function formatQuantity(planting: Pick<Planting, 'count' | 'rows'>): string | null {
   const parts = [
-    planting.rows != null && `${planting.rows} ${planting.rows === 1 ? 'Reihe' : 'Reihen'}`,
+    planting.rows != null && `${formatNumber(planting.rows)} ${planting.rows === 1 ? 'Reihe' : 'Reihen'}`,
     planting.count != null && `${planting.count} Stk.`,
   ].filter(Boolean)
   return parts.length > 0 ? parts.join(' · ') : null

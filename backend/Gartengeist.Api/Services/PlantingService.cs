@@ -34,7 +34,7 @@ public class PlantingService(
 
     // Abräumen – ganz oder nur ein Teil (nach Reihen oder nach Pflanzen). Beim Teil-Abräumen wird die Kultur
     // aufgeteilt: der abgeräumte Teil wird als beendete Kultur gespeichert (Verlauf/Fruchtfolge), der Rest bleibt stehen.
-    public async Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, int? rows, Guid userId)
+    public async Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, decimal? rows, Guid userId)
     {
         var planting = await plantingRepository.GetByIdAsync(id);
         if (planting is null) return null;
@@ -49,7 +49,7 @@ public class PlantingService(
         var countBefore = planting.Count;
         var rowsBefore = planting.Rows;
 
-        int? clearedRows = null;
+        decimal? clearedRows = null;
         int? clearedCount = null;
         string? text = null;
         if (rows is { } r && rowsBefore is { } totalRows && r < totalRows)
@@ -57,8 +57,8 @@ public class PlantingService(
             clearedRows = r;
             // Bekannte Pflanzenzahl anteilig mitnehmen
             if (countBefore is { } totalCount && totalCount > 1)
-                clearedCount = Math.Clamp((int)Math.Round(totalCount * (double)r / totalRows), 1, totalCount - 1);
-            text = $"{r} von {totalRows} Reihen";
+                clearedCount = Math.Clamp((int)Math.Round(totalCount * r / totalRows), 1, totalCount - 1);
+            text = $"{FormatNumber(r)} von {FormatNumber(totalRows)} Reihen";
         }
         else if (rows is null && count is { } c && countBefore is { } total && c < total)
         {
@@ -89,6 +89,10 @@ public class PlantingService(
 
     public Task<bool> DeleteAsync(Guid id) =>
         plantingRepository.DeleteAsync(id);
+
+    // „1,5“ statt „1.50“ – wie im Frontend (de-DE)
+    private static string FormatNumber(decimal value) =>
+        value.ToString("0.##", System.Globalization.CultureInfo.GetCultureInfo("de-DE"));
 
     private async Task<Planting> ToEntityAsync(PlantingRequest request)
     {

@@ -23,9 +23,9 @@ public class Planting
     [Column("anzahl")]
     public int? Count { get; set; }
 
-    // Vor allem bei Direktsaat (Möhren, Radieschen …) zählt man Reihen statt Pflanzen
+    // Vor allem bei Direktsaat (Möhren, Radieschen …) zählt man Reihen statt Pflanzen; halbe Reihen möglich
     [Column("reihen")]
-    public int? Rows { get; set; }
+    public decimal? Rows { get; set; }
 
     [Column("aussaat_datum")]
     public DateOnly? SowingDate { get; set; }

@@ -12,6 +12,6 @@ public interface IPlantingService
     Task<Planting?> GetByIdAsync(Guid id);
     Task<Planting> CreateAsync(PlantingRequest request, Guid userId);
     Task<Planting?> UpdateAsync(Guid id, PlantingRequest request);
-    Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, int? rows, Guid userId);
+    Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, decimal? rows, Guid userId);
     Task<bool> DeleteAsync(Guid id);
 }

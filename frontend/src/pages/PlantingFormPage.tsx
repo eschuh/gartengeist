@@ -8,6 +8,8 @@ import {
   inWindow,
   todayIso,
   usedAreaM2,
+  formatNumber,
+  parseDecimal,
   type EndPlantingResult,
   type Plant,
   type Planting,
@@ -59,7 +61,7 @@ export default function PlantingFormPage() {
         setExisting(planting)
         setVariety(planting.variety ?? '')
         setCount(planting.count?.toString() ?? '')
-        setRows(planting.rows?.toString() ?? '')
+        setRows(planting.rows != null ? formatNumber(planting.rows) : '')
         setSowingDate(planting.sowingDate ?? '')
         setPlantingDate(planting.plantingDate ?? '')
         setNotes(planting.notes ?? '')
@@ -106,10 +108,13 @@ export default function PlantingFormPage() {
     event.preventDefault()
     if (!plant || !area) return
     const parsedCount = count.trim() ? Number(count) : null
-    const parsedRows = rows.trim() ? Number(rows) : null
-    const invalid = (n: number | null) => n !== null && (!Number.isInteger(n) || n < 1)
-    if (invalid(parsedCount) || invalid(parsedRows)) {
-      setError('Reihen und Pflanzen bitte als ganze Zahl angeben.')
+    const parsedRows = parseDecimal(rows)
+    if (parsedCount !== null && (!Number.isInteger(parsedCount) || parsedCount < 1)) {
+      setError('Pflanzen bitte als ganze Zahl angeben.')
+      return
+    }
+    if (parsedRows !== null && (Number.isNaN(parsedRows) || parsedRows < 0.1 || parsedRows > 1000)) {
+      setError('Reihen bitte als Zahl angeben, z.B. 3 oder 1,5.')
       return
     }
     setSaving(true)
@@ -259,7 +264,14 @@ export default function PlantingFormPage() {
               <label htmlFor="rows" className={labelClass}>
                 Reihen <span className="font-normal text-text">(optional)</span>
               </label>
-              <input id="rows" className={inputClass} inputMode="numeric" value={rows} onChange={(e) => setRows(e.target.value)} />
+              <input
+                id="rows"
+                className={inputClass}
+                inputMode="decimal"
+                placeholder="z.B. 1,5"
+                value={rows}
+                onChange={(e) => setRows(e.target.value)}
+              />
             </div>
             <div>
               <label htmlFor="count" className={labelClass}>

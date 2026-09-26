@@ -57,6 +57,7 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
             planting.HasOne(p => p.Plant).WithMany().HasForeignKey(p => p.PlantId).OnDelete(DeleteBehavior.Restrict);
             planting.HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
             planting.HasIndex(p => new { p.AreaId, p.EndedOn });
+            planting.Property(p => p.Rows).HasPrecision(6, 2);
         });
 
         modelBuilder.Entity<JournalEntry>(entry =>
