@@ -5,6 +5,7 @@ export interface WeatherDay {
   tempMax: number | null
   precipitationMm: number | null
   precipitationProbability: number | null
+  sunshineHours: number | null
   source: 'meteoschweiz' | 'open-meteo'
 }
 

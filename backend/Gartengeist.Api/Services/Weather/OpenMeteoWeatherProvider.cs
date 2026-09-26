@@ -11,7 +11,10 @@ public class OpenMeteoWeatherProvider(IHttpClientFactory httpClientFactory) : IW
     private const string PrimaryModel = "meteoswiss_icon_seamless";
     private const string FallbackModel = "best_match";
     private static readonly string[] Variables =
-        ["weather_code", "temperature_2m_min", "temperature_2m_max", "precipitation_sum", "precipitation_probability_max"];
+    [
+        "weather_code", "temperature_2m_min", "temperature_2m_max", "precipitation_sum",
+        "precipitation_probability_max", "sunshine_duration", "daylight_duration"
+    ];
 
     public async Task<IReadOnlyList<WeatherDay>> GetDailyForecastAsync(decimal latitude, decimal longitude, int days)
     {
@@ -34,15 +37,36 @@ public class OpenMeteoWeatherProvider(IHttpClientFactory httpClientFactory) : IW
         return dates.Select((date, i) =>
         {
             var model = Value("temperature_2m_min", PrimaryModel, i) is null ? FallbackModel : PrimaryModel;
+            var sunshineSeconds = Value("sunshine_duration", model, i);
             return new WeatherDay(
                 date,
-                (int?)Value("weather_code", model, i),
+                DailyWeatherCode(
+                    (int?)Value("weather_code", model, i),
+                    sunshineSeconds,
+                    Value("daylight_duration", model, i)),
                 Value("temperature_2m_min", model, i),
                 Value("temperature_2m_max", model, i),
                 Value("precipitation_sum", model, i),
                 (int?)(Value("precipitation_probability_max", model, i)
                     ?? Value("precipitation_probability_max", FallbackModel, i)),
+                sunshineSeconds is { } s ? Math.Round(s / 3600m, 1) : null,
                 model == PrimaryModel ? "meteoschweiz" : "open-meteo");
         }).ToList();
+    }
+
+    // Der Tages-Wettercode ist der „schlechteste“ Stundenwert: eine Stunde Schleierwolken macht
+    // einen Sonnentag zu „bewölkt“. Für trockene Tage (Code 0–3) daher aus der Sonnenscheindauer
+    // ableiten; Nebel, Regen, Schnee und Gewitter bleiben wie vom Modell geliefert.
+    private static int? DailyWeatherCode(int? code, decimal? sunshineSeconds, decimal? daylightSeconds)
+    {
+        if (code is > 3 || sunshineSeconds is null || daylightSeconds is not > 0) return code;
+
+        var sunshineShare = sunshineSeconds.Value / daylightSeconds.Value;
+        return sunshineShare switch
+        {
+            >= 0.75m => 0, // sonnig
+            >= 0.45m => 2, // leicht bewölkt
+            _ => 3         // bewölkt
+        };
     }
 }

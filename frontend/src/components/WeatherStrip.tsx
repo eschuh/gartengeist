@@ -29,7 +29,9 @@ export default function WeatherStrip({ forecast }: { forecast: WeatherForecast }
               <span className="text-[11px]">
                 {day.precipitationMm !== null && day.precipitationMm >= 0.5
                   ? `${day.precipitationMm.toLocaleString('de-DE', { maximumFractionDigits: 0 })} mm`
-                  : ' '}
+                  : day.sunshineHours !== null
+                    ? `${Math.round(day.sunshineHours)} h ☀`
+                    : ' '}
               </span>
             </li>
           )

@@ -7,6 +7,7 @@ public record WeatherDay(
     decimal? TempMax,
     decimal? PrecipitationMm,
     int? PrecipitationProbability,
+    decimal? SunshineHours,
     // "meteoschweiz" oder "open-meteo" (Ersatzmodell, wenn MeteoSchweiz nicht so weit reicht)
     string Source
 );
