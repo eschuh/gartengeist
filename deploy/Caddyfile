@@ -1,0 +1,39 @@
+# DOMAIN kommt aus der .env auf dem Server, z.B. garten.example.ch oder 203-0-113-5.sslip.io
+{$DOMAIN} {
+	encode zstd gzip
+
+	# Fotos bis 15 MB (API-Limit) plus etwas Luft
+	request_body {
+		max_size 20MB
+	}
+
+	handle /api/* {
+		reverse_proxy api:8080
+	}
+
+	handle /health {
+		reverse_proxy api:8080
+	}
+
+	handle {
+		root * /srv
+
+		# Gebaute Dateien haben Hashes im Namen und ändern sich nie
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+
+		# App-Hülle und Service Worker immer neu prüfen, damit Updates sofort ankommen
+		@shell path / /index.html /sw.js /registerSW.js /manifest.webmanifest
+		header @shell Cache-Control "no-cache"
+
+		try_files {path} /index.html
+		file_server
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}

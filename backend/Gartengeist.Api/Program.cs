@@ -1,4 +1,5 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Gartengeist.Api.Data;
 using Gartengeist.Api.Models.Entities;
 using Gartengeist.Api.Repositories;
@@ -8,6 +9,7 @@ using Gartengeist.Api.Services.Interfaces;
 using Gartengeist.Api.Services.Weather;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -45,6 +47,23 @@ builder.Services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+// Schutz gegen Passwort-Raten: max. 10 Login-/Registrierungsversuche pro Minute und IP
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("auth", context => RateLimitPartition.GetFixedWindowLimiter(
+        context.Connection.RemoteIpAddress?.ToString() ?? "unbekannt",
+        _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(1) }));
+});
+
+// Hinter dem Reverse Proxy (Caddy) die echte Client-IP übernehmen; der Proxy ist nur im Docker-Netz erreichbar
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGardenRepository, GardenRepository>();
@@ -105,6 +124,8 @@ using (var scope = app.Services.CreateScope())
     await PlantCatalogSeeder.SeedAsync(db, app.Logger);
 }
 
+app.UseForwardedHeaders();
+app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
 

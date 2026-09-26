@@ -5,8 +5,12 @@ namespace Gartengeist.Api.Models.DTOs;
 public record RegisterRequest(
     [Required, MaxLength(100)] string Name,
     [Required, EmailAddress, MaxLength(200)] string Email,
-    [Required, MinLength(8), MaxLength(200)] string Password
+    [Required, MinLength(8), MaxLength(200)] string Password,
+    [MaxLength(200)] string? Code = null
 );
+
+// Open: noch freie Accounts; CodeRequired: Einladungscode nötig
+public record RegistrationStatus(bool Open, bool CodeRequired);
 
 public record LoginRequest(
     [Required] string Email,

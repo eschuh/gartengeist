@@ -51,6 +51,7 @@ export async function api<T>(path: string, options: RequestInit = {}): Promise<T
 }
 
 async function readError(response: Response): Promise<string> {
+  if (response.status === 429) return 'Zu viele Versuche – bitte eine Minute warten.'
   try {
     const body = await response.json()
     if (typeof body?.fehler === 'string') return body.fehler

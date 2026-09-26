@@ -1,5 +1,6 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { api } from '../api/client'
 import { useAuth } from '../auth/useAuth'
 import { inputClass, primaryButtonClass } from '../components/styles'
 
@@ -15,8 +16,17 @@ export default function LoginPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [code, setCode] = useState('')
+  const [registration, setRegistration] = useState<{ open: boolean; codeRequired: boolean } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  // Registrieren nur anbieten, solange noch ein Account frei ist
+  useEffect(() => {
+    api<{ open: boolean; codeRequired: boolean }>('/api/auth/registrierung')
+      .then(setRegistration)
+      .catch(() => setRegistration(null))
+  }, [])
 
   if (user) return <Navigate to={from} replace />
 
@@ -26,7 +36,7 @@ export default function LoginPage() {
     setSubmitting(true)
     try {
       if (mode === 'login') await login(email, password)
-      else await register(name, email, password)
+      else await register(name, email, password, code.trim() || null)
       navigate(from, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
@@ -74,6 +84,17 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+        {mode === 'register' && registration?.codeRequired && (
+          <input
+            className={inputClass}
+            placeholder="Einladungscode"
+            autoComplete="off"
+            autoCapitalize="off"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+          />
+        )}
 
         {error && (
           <p role="alert" className="text-sm text-danger">
@@ -90,16 +111,18 @@ export default function LoginPage() {
         </button>
       </form>
 
-      <button
-        type="button"
-        onClick={() => {
-          setMode(mode === 'login' ? 'register' : 'login')
-          setError(null)
-        }}
-        className="mt-6 min-h-11 text-sm text-accent"
-      >
-        {mode === 'login' ? 'Noch kein Konto? Registrieren' : 'Schon registriert? Anmelden'}
-      </button>
+      {(registration?.open || mode === 'register') && (
+        <button
+          type="button"
+          onClick={() => {
+            setMode(mode === 'login' ? 'register' : 'login')
+            setError(null)
+          }}
+          className="mt-6 min-h-11 text-sm text-accent"
+        >
+          {mode === 'login' ? 'Noch kein Konto? Registrieren' : 'Schon registriert? Anmelden'}
+        </button>
+      )}
     </div>
   )
 }

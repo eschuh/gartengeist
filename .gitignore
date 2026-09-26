@@ -1,5 +1,9 @@
 # Umgebungsvariablen (niemals einchecken)
 .env
+.env.prod
+
+# Backups auf dem Server
+backups/
 
 # .NET
 backend/**/bin/

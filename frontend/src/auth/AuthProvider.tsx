@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { api, getToken, setToken, setUnauthorizedHandler } from '../api/client'
+import { API_CACHE, PHOTO_CACHE } from '../cacheNames'
 import { AuthContext, type User } from './context'
 
 interface AuthResponse {
@@ -15,6 +16,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setToken(null)
     setUser(null)
+    // Offline-Kopien der Gartendaten nicht auf dem Gerät lassen
+    if ('caches' in window) {
+      void caches.delete(API_CACHE)
+      void caches.delete(PHOTO_CACHE)
+    }
   }, [])
 
   useEffect(() => {
@@ -49,11 +55,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 
   const register = useCallback(
-    async (name: string, email: string, password: string) => {
+    async (name: string, email: string, password: string, code: string | null) => {
       handleAuth(
         await api<AuthResponse>('/api/auth/registrieren', {
           method: 'POST',
-          body: JSON.stringify({ name, email, password }),
+          body: JSON.stringify({ name, email, password, code }),
         }),
       )
     },

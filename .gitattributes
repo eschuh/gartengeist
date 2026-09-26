@@ -1,0 +1,4 @@
+# Skripte und Konfiguration für den Linux-Server immer mit LF
+*.sh text eol=lf
+deploy/Caddyfile text eol=lf
+*.yml text eol=lf

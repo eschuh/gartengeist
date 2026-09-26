@@ -165,13 +165,22 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ---
 
+### Betrieb (vor Phase 4/5)
+- [x] Docker-Setup für Cloud-Server: Postgres, API, Caddy (automatisches HTTPS), tägliche Backups
+- [x] Deploy-Skript vom PC aus (`deploy/deploy.ps1`), inkl. Übernahme der lokalen Daten
+- [x] Registrierung nur mit Einladungscode, Login-Rate-Limit
+- [x] PWA: installierbar auf dem Homescreen, zuletzt geladene Daten offline lesbar
+- [ ] Server mieten und erstes Deployment (siehe DEPLOY.md)
+
+---
+
 ## UX / Design-Prinzipien
 
 - **Mobile-first**: große Tipp-Flächen, keine kleinen Links
 - **Kamera-nah**: Foto-Upload immer 1 Tap entfernt
 - **Bottom-Navigation**: Dashboard | Garten | Tagebuch | Aufgaben | KI
 - **Zwei Nutzer sichtbar**: Avatare/Farben zeigen wer was gemacht hat
-- **Offline-tolerant**: Lesen funktioniert ohne Netz (später)
+- **Offline-tolerant**: Lesen funktioniert ohne Netz (PWA-Cache); Schreiben offline → später
 
 ---
 

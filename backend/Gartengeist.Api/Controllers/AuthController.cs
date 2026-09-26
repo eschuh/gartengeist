@@ -4,6 +4,7 @@ using Gartengeist.Api.Services;
 using Gartengeist.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace Gartengeist.Api.Controllers;
 
@@ -12,6 +13,12 @@ namespace Gartengeist.Api.Controllers;
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [AllowAnonymous]
+    [HttpGet("registrierung")]
+    public async Task<IActionResult> RegistrationStatus() =>
+        Ok(await authService.GetRegistrationStatusAsync());
+
+    [AllowAnonymous]
+    [EnableRateLimiting("auth")]
     [HttpPost("registrieren")]
     public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
@@ -26,6 +33,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     [AllowAnonymous]
+    [EnableRateLimiting("auth")]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
