@@ -14,7 +14,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 | Backend | ASP.NET Core (.NET 10) + Entity Framework Core |
 | Datenbank | PostgreSQL + pgvector (für RAG/Embeddings) |
 | KI | Claude API (Chat, Analyse, Planung) |
-| Wetter | Open-Meteo API (kostenlos, kein API-Key) |
+| Wetter | Open-Meteo API mit MeteoSchweiz-Modell ICON-CH1/CH2 (`meteoswiss_icon_seamless`, ~5 Tage, 1–2 km), danach globales Modell als Ersatz; kostenlos, kein API-Key |
 | Ortssuche | Nominatim/OpenStreetMap (PLZ → Koordinaten; Open-Meteo-Geocoding findet PLZ unzuverlässig) |
 | Fotos | Lokaler Upload → Dateisystem oder Blob-Storage |
 | Auth | JWT-basiert, zwei Nutzer-Accounts |
@@ -105,7 +105,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [x] Pflanzen-Katalog (58 Gemüse/Kräuter/Blumen mit Anbaukalender, Mischkultur, Nährstoffbedarf)
 - [x] Bepflanzung anlegen (was steht wo, Aussaat-/Pflanzungsdatum, Ernteprognose, Mischkultur- und einfacher Fruchtfolge-Hinweis)
 - [x] Mobile Navigation (Bottom-Nav)
-- [ ] Dashboard: heutige Aufgaben, nächste Ernte, Wetterwarnung
+- [x] Dashboard: 7-Tage-Wetter, Frostwarnung mit betroffenen Kulturen, nächste Ernte, „Jetzt dran“ (Aufgaben kommen mit Phase 3 dazu)
 
 ### Phase 2 — Tagebuch & Fotos (Woche 3)
 - [ ] Tagebucheinträge erstellen mit Datum, Text, Fläche/Pflanze
@@ -126,8 +126,10 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [ ] Wintervorbereitung-Checkliste (automatisch im Herbst)
 
 ### Phase 4 — Wetter (Woche 5)
-- [ ] Open-Meteo Integration (aktuell + 7-Tage + historische Daten)
-- [ ] Wetter-Widget auf Dashboard
+- [x] Open-Meteo Integration: 7-Tage-Prognose mit MeteoSchweiz-Modell (Schnittstelle `IWeatherProvider`, 30 min Cache)
+- [ ] Historische Daten (Open-Meteo Archive)
+- [ ] Optional: echte Messwerte der nächsten MeteoSchweiz-Station (Open Government Data, STAC-API `ch.meteoschweiz.ogd-smn`) für Wetterrückblick und Jahresvergleich
+- [x] Wetter-Widget auf Dashboard
 - [ ] Wetter-Snapshot bei Tagebucheintrag
 - [ ] Automatische Aufgabe bei Frost-Warnung
 - [ ] Wetterrückblick: was wirklich war vs. Vorhersage
@@ -191,4 +193,4 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ## Nächster Schritt
 
-Dashboard: heutige Aufgaben, nächste Ernte, „jetzt dran“ (Aussaat/Pflanzung diesen Monat), Wetterwarnung – damit ist Phase 1 abgeschlossen.
+Phase 1 ist abgeschlossen. Weiter mit Phase 2: Tagebuch mit Fotos, Schnell-Aktionen (gegossen/gedüngt/geerntet), Ernte-Log.

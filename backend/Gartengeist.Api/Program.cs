@@ -5,6 +5,7 @@ using Gartengeist.Api.Repositories;
 using Gartengeist.Api.Repositories.Interfaces;
 using Gartengeist.Api.Services;
 using Gartengeist.Api.Services.Interfaces;
+using Gartengeist.Api.Services.Weather;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -57,6 +58,15 @@ builder.Services.AddScoped<IAreaService, AreaService>();
 builder.Services.AddScoped<IPlantService, PlantService>();
 builder.Services.AddScoped<IPlantingService, PlantingService>();
 builder.Services.AddSingleton<GeocodingService>();
+builder.Services.AddScoped<IWeatherService, WeatherService>();
+builder.Services.AddSingleton<IWeatherProvider, OpenMeteoWeatherProvider>();
+builder.Services.AddMemoryCache();
+
+builder.Services.AddHttpClient("openmeteo", c =>
+{
+    c.BaseAddress = new Uri("https://api.open-meteo.com/");
+    c.Timeout = TimeSpan.FromSeconds(10);
+});
 
 builder.Services.AddHttpClient("nominatim", c =>
 {
