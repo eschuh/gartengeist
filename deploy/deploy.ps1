@@ -48,7 +48,7 @@ try {
         ssh $Server "bash /tmp/gartengeist-setup.sh '$Domain'"
     }
     Invoke-Checked 'Bauen und starten (beim ersten Mal einige Minuten)' {
-        ssh $Server "set -e; rm -rf $remoteApp; mkdir -p $remoteApp; tar -xf /tmp/gartengeist.tar -C $remoteApp; $compose up -d --build --remove-orphans; docker image prune -f >/dev/null"
+        ssh $Server "set -e; rm -rf $remoteApp; mkdir -p $remoteApp; tar --warning=no-timestamp -xf /tmp/gartengeist.tar -C $remoteApp; $compose up -d --build --remove-orphans; docker image prune -f >/dev/null"
     }
 
     if ($DatenUebernehmen) {
