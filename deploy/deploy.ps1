@@ -15,7 +15,9 @@
 param(
     [Parameter(Mandatory = $true)] [string]$Server,
     [string]$Domain = '',
-    [switch]$DatenUebernehmen
+    [switch]$DatenUebernehmen,
+    # Sicherheitsabfrage vor der Datenübernahme überspringen (z.B. für nicht-interaktive Aufrufe)
+    [switch]$OhneRueckfrage
 )
 
 $ErrorActionPreference = 'Stop'
@@ -50,8 +52,10 @@ try {
     }
 
     if ($DatenUebernehmen) {
-        $answer = Read-Host 'Die Daten auf dem Server werden durch die lokalen ERSETZT. Fortfahren? (ja/nein)'
-        if ($answer -ne 'ja') { Write-Host 'Datenübernahme übersprungen.'; return }
+        if (-not $OhneRueckfrage) {
+            $answer = Read-Host 'Die Daten auf dem Server werden durch die lokalen ERSETZT. Fortfahren? (ja/nein)'
+            if ($answer -ne 'ja') { Write-Host 'Datenübernahme übersprungen.'; return }
+        }
 
         $dump = Join-Path $env:TEMP 'gartengeist-daten.dump'
         Invoke-Checked 'Lokale Datenbank sichern' {
