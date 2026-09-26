@@ -9,6 +9,8 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
     public DbSet<User> Users => Set<User>();
     public DbSet<Garden> Gardens => Set<Garden>();
     public DbSet<Area> Areas => Set<Area>();
+    public DbSet<Plant> Plants => Set<Plant>();
+    public DbSet<Planting> Plantings => Set<Planting>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -35,6 +37,18 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
         {
             area.Property(a => a.Width).HasPrecision(7, 2);
             area.Property(a => a.Length).HasPrecision(7, 2);
+        });
+
+        modelBuilder.Entity<Plant>()
+            .HasIndex(p => p.Key)
+            .IsUnique();
+
+        modelBuilder.Entity<Planting>(planting =>
+        {
+            planting.HasOne(p => p.Area).WithMany().HasForeignKey(p => p.AreaId).OnDelete(DeleteBehavior.Restrict);
+            planting.HasOne(p => p.Plant).WithMany().HasForeignKey(p => p.PlantId).OnDelete(DeleteBehavior.Restrict);
+            planting.HasOne(p => p.CreatedBy).WithMany().HasForeignKey(p => p.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            planting.HasIndex(p => new { p.AreaId, p.EndedOn });
         });
     }
 }

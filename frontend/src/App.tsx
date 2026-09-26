@@ -4,12 +4,16 @@ import RequireAuth from './auth/RequireAuth'
 import Layout from './components/Layout'
 import GardenProvider from './garden/GardenProvider'
 import RequireGarden from './garden/RequireGarden'
+import AreaDetailPage from './pages/AreaDetailPage'
 import AreaEditPage from './pages/AreaEditPage'
+import CatalogPage from './pages/CatalogPage'
 import DashboardPage from './pages/DashboardPage'
 import GardenPage from './pages/GardenPage'
 import GardenSettingsPage from './pages/GardenSettingsPage'
 import LoginPage from './pages/LoginPage'
 import PlaceholderPage from './pages/PlaceholderPage'
+import PlantDetailPage from './pages/PlantDetailPage'
+import PlantingFormPage from './pages/PlantingFormPage'
 import SetupWizardPage from './pages/SetupWizardPage'
 
 export default function App() {
@@ -27,7 +31,12 @@ export default function App() {
                   <Route path="garten" element={<GardenPage />} />
                   <Route path="garten/einstellungen" element={<GardenSettingsPage />} />
                   <Route path="garten/flaechen/neu" element={<AreaEditPage />} />
-                  <Route path="garten/flaechen/:id" element={<AreaEditPage />} />
+                  <Route path="garten/flaechen/:id" element={<AreaDetailPage />} />
+                  <Route path="garten/flaechen/:id/bearbeiten" element={<AreaEditPage />} />
+                  <Route path="garten/flaechen/:areaId/bepflanzen" element={<PlantingFormPage />} />
+                  <Route path="garten/bepflanzungen/:id" element={<PlantingFormPage />} />
+                  <Route path="garten/katalog" element={<CatalogPage />} />
+                  <Route path="garten/katalog/:id" element={<PlantDetailPage />} />
                   <Route
                     path="tagebuch"
                     element={<PlaceholderPage title="Tagebuch" description="Einträge, Fotos und Ernte-Log – Phase 2." />}

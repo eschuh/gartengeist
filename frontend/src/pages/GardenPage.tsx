@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
+import type { Planting } from '../api/plants'
 import type { Area } from '../api/types'
 import AreaCard from '../components/AreaCard'
-import { primaryButtonClass } from '../components/styles'
+import { primaryButtonClass, secondaryButtonClass } from '../components/styles'
 import { useGarden } from '../garden/useGarden'
 
 export default function GardenPage() {
   const { garden } = useGarden()
   const [areas, setAreas] = useState<Area[] | null>(null)
+  const [plantings, setPlantings] = useState<Planting[]>([])
   const [showArchived, setShowArchived] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -17,6 +19,19 @@ export default function GardenPage() {
       .then(setAreas)
       .catch((err) => setError(err instanceof Error ? err.message : 'Flächen konnten nicht geladen werden'))
   }, [showArchived])
+
+  useEffect(() => {
+    api<Planting[]>('/api/bepflanzungen')
+      .then(setPlantings)
+      .catch(() => setPlantings([]))
+  }, [])
+
+  function plantingSummary(areaId: string): string | null {
+    const names = plantings.filter((p) => p.areaId === areaId).map((p) => p.plantName)
+    const unique = [...new Set(names)]
+    if (unique.length === 0) return null
+    return unique.length <= 3 ? unique.join(', ') : `${unique.slice(0, 3).join(', ')} +${unique.length - 3}`
+  }
 
   const active = areas?.filter((a) => !a.archivedAt) ?? []
   const archived = areas?.filter((a) => a.archivedAt) ?? []
@@ -63,15 +78,24 @@ export default function GardenPage() {
           {active.map((area) => (
             <li key={area.id}>
               <Link to={`/garten/flaechen/${area.id}`} className="block">
-                <AreaCard area={area} action={<span className="text-xl text-text">›</span>} />
+                <AreaCard
+                  area={area}
+                  subtitle={plantingSummary(area.id)}
+                  action={<span className="text-xl text-text">›</span>}
+                />
               </Link>
             </li>
           ))}
         </ul>
 
-        <Link to="/garten/flaechen/neu" className={`${primaryButtonClass} mt-4 flex items-center justify-center`}>
-          + Fläche hinzufügen
-        </Link>
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <Link to="/garten/flaechen/neu" className={`${secondaryButtonClass} flex items-center justify-center`}>
+            + Fläche
+          </Link>
+          <Link to="/garten/katalog" className={`${primaryButtonClass} flex items-center justify-center`}>
+            Pflanzen-Katalog
+          </Link>
+        </div>
       </div>
 
       <div>

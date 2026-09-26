@@ -8,7 +8,14 @@ const typeColors: Record<AreaInput['type'], string> = {
   naturnah: 'bg-lime-600',
 }
 
-export default function AreaCard({ area, action }: { area: AreaInput; action?: ReactNode }) {
+interface AreaCardProps {
+  area: AreaInput
+  // Zusätzliche Zeile, z.B. was gerade darauf wächst
+  subtitle?: string | null
+  action?: ReactNode
+}
+
+export default function AreaCard({ area, subtitle, action }: AreaCardProps) {
   const size = formatAreaSize(area)
 
   return (
@@ -20,6 +27,7 @@ export default function AreaCard({ area, action }: { area: AreaInput; action?: R
           {areaTypeLabel(area.type)}
           {size && ` · ${size}`}
         </span>
+        {subtitle && <span className="block truncate text-xs text-accent">{subtitle}</span>}
       </div>
       {action}
     </div>

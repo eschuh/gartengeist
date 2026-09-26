@@ -52,6 +52,10 @@ export interface Area extends AreaInput {
   updatedAt: string
 }
 
+export function areaSizeM2(area: Pick<AreaInput, 'width' | 'length'>): number | null {
+  return area.width == null || area.length == null ? null : area.width * area.length
+}
+
 export function formatAreaSize(area: Pick<AreaInput, 'width' | 'length'>): string | null {
   if (area.width == null || area.length == null) return null
   const fmt = (n: number) => n.toLocaleString('de-DE', { maximumFractionDigits: 2 })

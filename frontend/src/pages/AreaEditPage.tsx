@@ -30,11 +30,11 @@ export default function AreaEditPage() {
     setSaving(true)
     setError(null)
     try {
-      await api<Area>(isNew ? '/api/flaechen' : `/api/flaechen/${id}`, {
+      const saved = await api<Area>(isNew ? '/api/flaechen' : `/api/flaechen/${id}`, {
         method: isNew ? 'POST' : 'PUT',
         body: JSON.stringify(input),
       })
-      navigate('/garten')
+      navigate(`/garten/flaechen/${saved.id}`, { replace: true })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen')
       setSaving(false)
@@ -55,8 +55,11 @@ export default function AreaEditPage() {
 
   return (
     <section>
-      <Link to="/garten" className="mb-2 inline-flex min-h-11 items-center text-sm text-accent">
-        ‹ Garten
+      <Link
+        to={isNew ? '/garten' : `/garten/flaechen/${id}`}
+        className="mb-2 inline-flex min-h-11 items-center text-sm text-accent"
+      >
+        ‹ {isNew ? 'Garten' : area?.name ?? 'Zurück'}
       </Link>
       <h1 className="mb-4 text-xl font-semibold text-heading">{isNew ? 'Neue Fläche' : area?.name ?? 'Fläche'}</h1>
 

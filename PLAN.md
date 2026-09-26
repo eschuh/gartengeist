@@ -35,19 +35,20 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - `breite`, `länge` (in Metern)
 - `beschreibung`
 
-### Pflanzen-Katalog (`plant_catalog`)
-- `id`, `name`, `lateinisch`, `kategorie`
-- `aussaatVon`, `aussaatBis` (Monate)
-- `ernteDauerTage`, `platzbedarf` (m²/Pflanze)
-- `wasserbedarf`, `düngebedarf`
-- `mischkulturGut[]`, `mischkulturSchlecht[]`
+### Pflanzen-Katalog (`pflanze`)
+- `id`, `schluessel` (stabil, z.B. `tomate`), `name`, `lateinisch`, `familie`, `kategorie`
+- Monatsfenster: `voranzucht`, `direktsaat`, `auspflanzen`, `ernte` (von/bis, über Jahreswechsel möglich)
+- `voranzuchtWochen`, `tageBisErnte`, `pflanzabstandCm`, `reihenabstandCm` (→ Platzbedarf m²/Pflanze)
+- `naehrstoffbedarf` (stark/mittel/schwach), `wasserbedarf`, `frostempfindlich`, `mehrjaehrig`
+- `mischkulturGut[]`, `mischkulturSchlecht[]` (Schlüssel), `hinweis`
+- Quelle: `backend/Gartengeist.Api/Data/Seed/pflanzen.json`, wird beim Start abgeglichen
 
-### Bepflanzung (`plantings`)
-- `id`, `areaId`, `plantCatalogId`
+### Bepflanzung (`bepflanzung`)
+- `id`, `flaecheId`, `pflanzeId`
 - `sorte`, `anzahl`
 - `aussaatDatum`, `pflanzDatum`
-- `voraussichtlicheErnte`
-- `notizen`
+- `voraussichtlicheErnte` (berechnet aus Datum + Kulturdauer)
+- `notizen`, `beendetAm` (abgeerntet; bleibt für Fruchtfolge erhalten), `angelegtVon`
 
 ### Tagebuch (`journal_entries`)
 - `id`, `userId`, `datum`
@@ -101,8 +102,8 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [x] Auth: Registrierung, Login, JWT
 - [x] Einrichtungs-Wizard: Standort, Flächen anlegen, Haushaltsgröße
 - [x] Flächen-Verwaltung (CRUD)
-- [ ] Pflanzen-Katalog (Basis-Daten mit ~50 Gemüse/Kräuter, inkl. Saatgut-Scanner via Foto)
-- [ ] Bepflanzung anlegen (was steht wo, Aussaat-/Pflanzungsdatum)
+- [x] Pflanzen-Katalog (58 Gemüse/Kräuter/Blumen mit Anbaukalender, Mischkultur, Nährstoffbedarf)
+- [x] Bepflanzung anlegen (was steht wo, Aussaat-/Pflanzungsdatum, Ernteprognose, Mischkultur- und einfacher Fruchtfolge-Hinweis)
 - [x] Mobile Navigation (Bottom-Nav)
 - [ ] Dashboard: heutige Aufgaben, nächste Ernte, Wetterwarnung
 
@@ -134,6 +135,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ### Phase 5 — KI-Assistent (Woche 6–7)
 - [ ] Claude-Integration im Backend
+- [ ] Saatgut-Scanner: Foto der Samentüte → Pflanze + Sorte erkennen (aus Phase 1 verschoben, braucht Claude)
 - [ ] Chat-Interface (Kontext: Flächen, Pflanzen, Aufgaben, Wetter, Tagebuch)
 - [ ] Dokument-Upload + RAG (pgvector Embeddings)
 - [ ] Foto-Analyse: Pflanzenkrankheiten, Schädlinge erkennen
@@ -189,4 +191,4 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ## Nächster Schritt
 
-Pflanzen-Katalog (~50 Gemüse/Kräuter als Seed-Daten) und Bepflanzung anlegen.
+Dashboard: heutige Aufgaben, nächste Ernte, „jetzt dran“ (Aussaat/Pflanzung diesen Monat), Wetterwarnung – damit ist Phase 1 abgeschlossen.

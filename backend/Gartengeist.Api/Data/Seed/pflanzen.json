@@ -1,0 +1,582 @@
+[
+  {
+    "schluessel": "tomate", "name": "Tomate", "lateinisch": "Solanum lycopersicum",
+    "familie": "Nachtschattengewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [3, 4], "auspflanzen": [5, 6], "ernte": [7, 10],
+    "voranzuchtWochen": 8, "tageBisErnte": 70, "pflanzabstandCm": 60, "reihenabstandCm": 80,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": true,
+    "gut": ["basilikum", "petersilie", "moehre", "zwiebel", "knoblauch", "lauch", "kopfsalat", "spinat", "knollensellerie", "kapuzinerkresse", "tagetes", "ringelblume"],
+    "schlecht": ["kartoffel", "erbse", "gurke"],
+    "hinweis": "Ins Freiland erst nach den Eisheiligen, im Gewächshaus/Tomatenhaus ab Ende April. Regelmäßig ausgeizen und nur von unten gießen."
+  },
+  {
+    "schluessel": "paprika", "name": "Paprika", "lateinisch": "Capsicum annuum",
+    "familie": "Nachtschattengewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [2, 3], "auspflanzen": [5, 6], "ernte": [7, 10],
+    "voranzuchtWochen": 10, "tageBisErnte": 80, "pflanzabstandCm": 40, "reihenabstandCm": 50,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["basilikum", "tomate", "moehre", "zwiebel", "knoblauch"],
+    "schlecht": ["erbse"],
+    "hinweis": "Braucht viel Wärme – im Gewächshaus deutlich ertragreicher als im Freiland."
+  },
+  {
+    "schluessel": "chili", "name": "Chili", "lateinisch": "Capsicum spp.",
+    "familie": "Nachtschattengewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [1, 3], "auspflanzen": [5, 6], "ernte": [7, 10],
+    "voranzuchtWochen": 10, "tageBisErnte": 90, "pflanzabstandCm": 40, "reihenabstandCm": 50,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["basilikum", "tomate", "moehre", "zwiebel", "knoblauch"],
+    "schlecht": ["erbse"],
+    "hinweis": "Scharfe Sorten (C. chinense) keimen langsam – früh im Jahr bei 25 °C vorziehen. Lässt sich im Topf überwintern."
+  },
+  {
+    "schluessel": "aubergine", "name": "Aubergine", "lateinisch": "Solanum melongena",
+    "familie": "Nachtschattengewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [2, 3], "auspflanzen": [5, 6], "ernte": [7, 9],
+    "voranzuchtWochen": 10, "tageBisErnte": 85, "pflanzabstandCm": 50, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": true,
+    "gut": ["buschbohne", "basilikum", "tagetes"],
+    "schlecht": ["kartoffel"],
+    "hinweis": "Sehr wärmebedürftig, gehört ins Gewächshaus."
+  },
+  {
+    "schluessel": "gurke", "name": "Gurke", "lateinisch": "Cucumis sativus",
+    "familie": "Kürbisgewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [4, 5], "direktsaat": [5, 6], "auspflanzen": [5, 6], "ernte": [7, 9],
+    "voranzuchtWochen": 4, "tageBisErnte": 60, "pflanzabstandCm": 40, "reihenabstandCm": 100,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": true,
+    "gut": ["dill", "buschbohne", "erbse", "kopfsalat", "zwiebel", "mais", "sonnenblume", "kapuzinerkresse", "borretsch"],
+    "schlecht": ["tomate", "radieschen", "rettich", "kartoffel", "zucchini"],
+    "hinweis": "Mit lauwarmem Wasser gießen. Schlangengurken ins Gewächshaus, Freilandgurken ins Beet."
+  },
+  {
+    "schluessel": "zucchini", "name": "Zucchini", "lateinisch": "Cucurbita pepo",
+    "familie": "Kürbisgewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [4, 5], "direktsaat": [5, 6], "auspflanzen": [5, 6], "ernte": [7, 10],
+    "voranzuchtWochen": 4, "tageBisErnte": 50, "pflanzabstandCm": 100, "reihenabstandCm": 100,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": true,
+    "gut": ["buschbohne", "stangenbohne", "zwiebel", "mais", "kapuzinerkresse", "ringelblume", "borretsch"],
+    "schlecht": ["gurke", "kuerbis", "kartoffel"],
+    "hinweis": "Ein bis zwei Pflanzen reichen für einen Haushalt meist völlig. Früchte jung ernten."
+  },
+  {
+    "schluessel": "kuerbis", "name": "Kürbis", "lateinisch": "Cucurbita spp.",
+    "familie": "Kürbisgewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [4, 5], "direktsaat": [5, 6], "auspflanzen": [5, 6], "ernte": [9, 10],
+    "voranzuchtWochen": 4, "tageBisErnte": 100, "pflanzabstandCm": 150, "reihenabstandCm": 150,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": true,
+    "gut": ["mais", "stangenbohne", "kapuzinerkresse", "zwiebel"],
+    "schlecht": ["kartoffel", "gurke", "zucchini"],
+    "hinweis": "Klassisch als „Drei Schwestern“ mit Mais und Stangenbohne. Gut auf oder neben dem Kompost."
+  },
+  {
+    "schluessel": "zuckermelone", "name": "Zuckermelone", "lateinisch": "Cucumis melo",
+    "familie": "Kürbisgewächse", "kategorie": "fruchtgemuese",
+    "voranzucht": [4, 4], "auspflanzen": [5, 6], "ernte": [8, 9],
+    "voranzuchtWochen": 4, "tageBisErnte": 80, "pflanzabstandCm": 80, "reihenabstandCm": 100,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["mais", "sonnenblume"],
+    "schlecht": ["gurke", "kartoffel"],
+    "hinweis": "Nur im Gewächshaus oder an sehr warmen, geschützten Plätzen."
+  },
+  {
+    "schluessel": "mais", "name": "Zuckermais", "lateinisch": "Zea mays convar. saccharata",
+    "familie": "Süßgräser", "kategorie": "fruchtgemuese",
+    "voranzucht": [4, 5], "direktsaat": [5, 5], "auspflanzen": [5, 6], "ernte": [8, 9],
+    "voranzuchtWochen": 3, "tageBisErnte": 90, "pflanzabstandCm": 35, "reihenabstandCm": 70,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["stangenbohne", "buschbohne", "kuerbis", "gurke", "zucchini"],
+    "schlecht": ["rote-bete", "knollensellerie"],
+    "hinweis": "Im Block statt in einer Reihe pflanzen – Mais wird vom Wind bestäubt."
+  },
+  {
+    "schluessel": "buschbohne", "name": "Buschbohne", "lateinisch": "Phaseolus vulgaris var. nanus",
+    "familie": "Hülsenfrüchtler", "kategorie": "huelsenfruechte",
+    "direktsaat": [5, 7], "ernte": [7, 9],
+    "tageBisErnte": 70, "pflanzabstandCm": 8, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["bohnenkraut", "kopfsalat", "gurke", "kohlrabi", "kategorie:kohl", "rote-bete", "mangold", "erdbeere", "radieschen", "knollensellerie", "mais"],
+    "schlecht": ["erbse", "zwiebel", "knoblauch", "lauch", "fruehlingszwiebel", "schnittlauch"],
+    "hinweis": "Erst säen, wenn der Boden warm ist (über 10 °C). Bindet Stickstoff – gute Vorkultur für Starkzehrer."
+  },
+  {
+    "schluessel": "stangenbohne", "name": "Stangenbohne", "lateinisch": "Phaseolus vulgaris var. vulgaris",
+    "familie": "Hülsenfrüchtler", "kategorie": "huelsenfruechte",
+    "direktsaat": [5, 6], "ernte": [7, 10],
+    "tageBisErnte": 80, "pflanzabstandCm": 60, "reihenabstandCm": 80,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["mais", "kuerbis", "bohnenkraut", "kopfsalat", "gurke", "zucchini"],
+    "schlecht": ["erbse", "zwiebel", "knoblauch", "lauch", "fruehlingszwiebel"],
+    "hinweis": "Pro Stange 6–8 Bohnen im Kreis legen. Braucht 2–2,5 m hohe Rankhilfe."
+  },
+  {
+    "schluessel": "erbse", "name": "Erbse", "lateinisch": "Pisum sativum",
+    "familie": "Hülsenfrüchtler", "kategorie": "huelsenfruechte",
+    "direktsaat": [3, 5], "ernte": [6, 7],
+    "tageBisErnte": 75, "pflanzabstandCm": 5, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["moehre", "radieschen", "kopfsalat", "kohlrabi", "gurke", "zucchini", "mais", "dill"],
+    "schlecht": ["buschbohne", "stangenbohne", "tomate", "zwiebel", "knoblauch", "lauch", "kartoffel", "schnittlauch"],
+    "hinweis": "Schal- und Markerbsen vertragen leichten Frost. Rankhilfe (Reisig, Netz) geben. Nicht nach Erbsen anbauen – mindestens 4 Jahre Pause."
+  },
+  {
+    "schluessel": "dicke-bohne", "name": "Dicke Bohne", "lateinisch": "Vicia faba",
+    "familie": "Hülsenfrüchtler", "kategorie": "huelsenfruechte",
+    "direktsaat": [2, 4], "ernte": [6, 7],
+    "tageBisErnte": 100, "pflanzabstandCm": 15, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["kartoffel", "spinat", "kopfsalat", "bohnenkraut"],
+    "schlecht": ["zwiebel", "knoblauch", "erbse"],
+    "hinweis": "Frühe Aussaat schützt vor Schwarzen Bohnenläusen – bei Befall die Triebspitzen ausbrechen."
+  },
+  {
+    "schluessel": "weisskohl", "name": "Weißkohl", "lateinisch": "Brassica oleracea convar. capitata var. alba",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [3, 5], "auspflanzen": [4, 6], "ernte": [7, 11],
+    "voranzuchtWochen": 6, "tageBisErnte": 110, "pflanzabstandCm": 50, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["knollensellerie", "tomate", "buschbohne", "kopfsalat", "spinat", "rote-bete", "dill", "thymian", "salbei", "erbse"],
+    "schlecht": ["erdbeere", "zwiebel", "knoblauch"],
+    "hinweis": "Kohlnetz gegen Kohlweißling und Kohlfliege. Frühsorten ab ca. 60 Tagen, Lagersorten bis 150 Tage."
+  },
+  {
+    "schluessel": "rotkohl", "name": "Rotkohl", "lateinisch": "Brassica oleracea convar. capitata var. rubra",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [3, 5], "auspflanzen": [4, 6], "ernte": [8, 11],
+    "voranzuchtWochen": 6, "tageBisErnte": 120, "pflanzabstandCm": 50, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["knollensellerie", "tomate", "buschbohne", "kopfsalat", "spinat", "rote-bete", "dill", "thymian", "salbei", "erbse"],
+    "schlecht": ["erdbeere", "zwiebel", "knoblauch"],
+    "hinweis": "Kohlnetz gegen Kohlweißling und Kohlfliege."
+  },
+  {
+    "schluessel": "brokkoli", "name": "Brokkoli", "lateinisch": "Brassica oleracea var. italica",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [3, 6], "auspflanzen": [4, 7], "ernte": [6, 10],
+    "voranzuchtWochen": 5, "tageBisErnte": 70, "pflanzabstandCm": 40, "reihenabstandCm": 50,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["knollensellerie", "tomate", "buschbohne", "kopfsalat", "spinat", "rote-bete", "dill", "thymian", "salbei", "erbse"],
+    "schlecht": ["erdbeere", "zwiebel", "knoblauch"],
+    "hinweis": "Nach dem Haupttrieb bilden sich Seitentriebe – weiter ernten."
+  },
+  {
+    "schluessel": "blumenkohl", "name": "Blumenkohl", "lateinisch": "Brassica oleracea var. botrytis",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [3, 5], "auspflanzen": [4, 6], "ernte": [6, 10],
+    "voranzuchtWochen": 5, "tageBisErnte": 80, "pflanzabstandCm": 50, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["knollensellerie", "tomate", "buschbohne", "kopfsalat", "spinat", "rote-bete", "dill", "thymian", "salbei", "erbse"],
+    "schlecht": ["erdbeere", "zwiebel", "knoblauch"],
+    "hinweis": "Blume mit Blättern abdecken, damit sie weiß bleibt. Gleichmäßig feucht halten."
+  },
+  {
+    "schluessel": "kohlrabi", "name": "Kohlrabi", "lateinisch": "Brassica oleracea var. gongylodes",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [2, 7], "auspflanzen": [3, 8], "ernte": [5, 10],
+    "voranzuchtWochen": 5, "tageBisErnte": 50, "pflanzabstandCm": 25, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["kopfsalat", "buschbohne", "erbse", "spinat", "rote-bete", "knollensellerie", "lauch", "radieschen", "feldsalat"],
+    "schlecht": [],
+    "hinweis": "Ideal als Zwischenkultur. Gleichmäßig gießen, sonst platzen die Knollen."
+  },
+  {
+    "schluessel": "gruenkohl", "name": "Grünkohl", "lateinisch": "Brassica oleracea var. sabellica",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [5, 6], "direktsaat": [5, 6], "auspflanzen": [6, 7], "ernte": [10, 2],
+    "voranzuchtWochen": 5, "tageBisErnte": 120, "pflanzabstandCm": 40, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["knollensellerie", "spinat", "rote-bete", "kopfsalat", "dill", "thymian", "salbei"],
+    "schlecht": ["erdbeere", "zwiebel", "knoblauch"],
+    "hinweis": "Schmeckt nach dem ersten Frost am besten. Gute Nachkultur nach Frühkartoffeln oder Erbsen."
+  },
+  {
+    "schluessel": "rosenkohl", "name": "Rosenkohl", "lateinisch": "Brassica oleracea var. gemmifera",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "voranzucht": [4, 5], "auspflanzen": [5, 6], "ernte": [10, 2],
+    "voranzuchtWochen": 6, "tageBisErnte": 150, "pflanzabstandCm": 50, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["knollensellerie", "spinat", "kopfsalat", "dill", "thymian", "salbei"],
+    "schlecht": ["erdbeere", "zwiebel", "knoblauch"],
+    "hinweis": "Lange Kulturzeit. Röschen von unten nach oben ernten, Frost macht sie milder."
+  },
+  {
+    "schluessel": "pak-choi", "name": "Pak Choi", "lateinisch": "Brassica rapa subsp. chinensis",
+    "familie": "Kreuzblütler", "kategorie": "kohl",
+    "direktsaat": [4, 8], "ernte": [5, 10],
+    "tageBisErnte": 45, "pflanzabstandCm": 25, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["kopfsalat", "spinat", "knollensellerie"],
+    "schlecht": [],
+    "hinweis": "Schießt bei Hitze und langen Tagen schnell – Aussaat ab Juli ist am zuverlässigsten."
+  },
+  {
+    "schluessel": "moehre", "name": "Möhre", "lateinisch": "Daucus carota subsp. sativus",
+    "familie": "Doldenblütler", "kategorie": "wurzelgemuese",
+    "direktsaat": [3, 7], "ernte": [6, 11],
+    "tageBisErnte": 100, "pflanzabstandCm": 3, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["zwiebel", "lauch", "knoblauch", "erbse", "radieschen", "rettich", "kopfsalat", "tomate", "schnittlauch", "dill", "salbei", "pastinake"],
+    "schlecht": [],
+    "hinweis": "Keimt langsam (2–3 Wochen) – Radieschen als Markiersaat dazu. Zwiebeln daneben halten die Möhrenfliege fern."
+  },
+  {
+    "schluessel": "pastinake", "name": "Pastinake", "lateinisch": "Pastinaca sativa",
+    "familie": "Doldenblütler", "kategorie": "wurzelgemuese",
+    "direktsaat": [3, 5], "ernte": [10, 3],
+    "tageBisErnte": 160, "pflanzabstandCm": 10, "reihenabstandCm": 35,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["zwiebel", "radieschen", "kopfsalat", "moehre"],
+    "schlecht": [],
+    "hinweis": "Nur frisches Saatgut keimt gut. Winterhart – kann bis zum Frühjahr im Beet bleiben."
+  },
+  {
+    "schluessel": "rote-bete", "name": "Rote Bete", "lateinisch": "Beta vulgaris subsp. vulgaris var. conditiva",
+    "familie": "Fuchsschwanzgewächse", "kategorie": "wurzelgemuese",
+    "direktsaat": [4, 7], "ernte": [7, 10],
+    "tageBisErnte": 90, "pflanzabstandCm": 10, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["zwiebel", "buschbohne", "kohlrabi", "kopfsalat", "dill", "kategorie:kohl"],
+    "schlecht": ["spinat", "mangold", "mais"],
+    "hinweis": "Jedes Samenknäuel bringt mehrere Pflänzchen – auf 10 cm vereinzeln."
+  },
+  {
+    "schluessel": "radieschen", "name": "Radieschen", "lateinisch": "Raphanus sativus var. sativus",
+    "familie": "Kreuzblütler", "kategorie": "wurzelgemuese",
+    "direktsaat": [3, 9], "ernte": [4, 10],
+    "tageBisErnte": 30, "pflanzabstandCm": 3, "reihenabstandCm": 15,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["moehre", "erbse", "kopfsalat", "spinat", "buschbohne", "kohlrabi", "tomate", "kapuzinerkresse"],
+    "schlecht": ["gurke"],
+    "hinweis": "Alle 2–3 Wochen nachsäen für laufende Ernte. Bei Trockenheit werden sie holzig und scharf."
+  },
+  {
+    "schluessel": "rettich", "name": "Rettich", "lateinisch": "Raphanus sativus var. niger",
+    "familie": "Kreuzblütler", "kategorie": "wurzelgemuese",
+    "direktsaat": [3, 8], "ernte": [5, 11],
+    "tageBisErnte": 60, "pflanzabstandCm": 15, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["moehre", "erbse", "kopfsalat", "spinat", "buschbohne", "kohlrabi", "tomate"],
+    "schlecht": ["gurke"],
+    "hinweis": "Sommer- und Wintersorten beachten – Winterrettich ab Juli säen."
+  },
+  {
+    "schluessel": "kartoffel", "name": "Kartoffel", "lateinisch": "Solanum tuberosum",
+    "familie": "Nachtschattengewächse", "kategorie": "wurzelgemuese",
+    "direktsaat": [4, 5], "ernte": [6, 10],
+    "tageBisErnte": 110, "pflanzabstandCm": 35, "reihenabstandCm": 65,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["dicke-bohne", "kapuzinerkresse", "ringelblume", "tagetes", "spinat", "kohlrabi"],
+    "schlecht": ["tomate", "kuerbis", "gurke", "zucchini", "sonnenblume", "erbse", "knollensellerie", "aubergine"],
+    "hinweis": "„Aussaat“ = Legen der Saatkartoffeln. Vorkeimen bringt 2–3 Wochen Vorsprung. Regelmäßig anhäufeln."
+  },
+  {
+    "schluessel": "knollensellerie", "name": "Knollensellerie", "lateinisch": "Apium graveolens var. rapaceum",
+    "familie": "Doldenblütler", "kategorie": "wurzelgemuese",
+    "voranzucht": [2, 3], "auspflanzen": [5, 6], "ernte": [9, 11],
+    "voranzuchtWochen": 10, "tageBisErnte": 130, "pflanzabstandCm": 40, "reihenabstandCm": 50,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": true,
+    "gut": ["lauch", "tomate", "kategorie:kohl", "kohlrabi", "buschbohne", "gurke"],
+    "schlecht": ["kartoffel", "mais", "kopfsalat", "pfluecksalat"],
+    "hinweis": "Lichtkeimer, nicht mit Erde bedecken. Flach pflanzen – die Knolle soll oben herausschauen."
+  },
+  {
+    "schluessel": "zwiebel", "name": "Zwiebel", "lateinisch": "Allium cepa",
+    "familie": "Amaryllisgewächse", "kategorie": "zwiebelgemuese",
+    "direktsaat": [3, 4], "auspflanzen": [3, 4], "ernte": [7, 9],
+    "tageBisErnte": 110, "pflanzabstandCm": 8, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false,
+    "gut": ["moehre", "erdbeere", "rote-bete", "gurke", "tomate", "dill", "pastinake", "kopfsalat", "zucchini", "feldsalat"],
+    "schlecht": ["buschbohne", "stangenbohne", "erbse", "dicke-bohne", "kategorie:kohl"],
+    "hinweis": "Steckzwiebeln = Auspflanzen. Ernten, wenn das Laub umknickt und gelb wird; danach gut trocknen."
+  },
+  {
+    "schluessel": "knoblauch", "name": "Knoblauch", "lateinisch": "Allium sativum",
+    "familie": "Amaryllisgewächse", "kategorie": "zwiebelgemuese",
+    "auspflanzen": [9, 11], "ernte": [6, 7],
+    "tageBisErnte": 270, "pflanzabstandCm": 12, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false,
+    "gut": ["erdbeere", "tomate", "moehre", "rote-bete", "gurke"],
+    "schlecht": ["buschbohne", "stangenbohne", "erbse", "dicke-bohne", "kategorie:kohl"],
+    "hinweis": "Herbstpflanzung bringt größere Knollen; Stecken im Februar/März ist auch möglich. Zehen mit der Spitze nach oben."
+  },
+  {
+    "schluessel": "lauch", "name": "Lauch (Porree)", "lateinisch": "Allium porrum",
+    "familie": "Amaryllisgewächse", "kategorie": "zwiebelgemuese",
+    "voranzucht": [2, 4], "auspflanzen": [5, 7], "ernte": [8, 3],
+    "voranzuchtWochen": 10, "tageBisErnte": 120, "pflanzabstandCm": 15, "reihenabstandCm": 35,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["moehre", "knollensellerie", "tomate", "erdbeere", "kopfsalat", "kohlrabi"],
+    "schlecht": ["buschbohne", "stangenbohne", "erbse", "rote-bete"],
+    "hinweis": "Tief in Pflanzlöcher setzen und anhäufeln für lange weiße Schäfte. Winterlauch bleibt bis zum Frühjahr im Beet."
+  },
+  {
+    "schluessel": "fruehlingszwiebel", "name": "Frühlingszwiebel", "lateinisch": "Allium fistulosum",
+    "familie": "Amaryllisgewächse", "kategorie": "zwiebelgemuese",
+    "direktsaat": [3, 8], "ernte": [5, 11],
+    "tageBisErnte": 60, "pflanzabstandCm": 3, "reihenabstandCm": 20,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["moehre", "erdbeere", "rote-bete", "tomate", "kopfsalat"],
+    "schlecht": ["buschbohne", "stangenbohne", "erbse"],
+    "hinweis": "Satzweise alle 4 Wochen säen."
+  },
+  {
+    "schluessel": "kopfsalat", "name": "Kopfsalat", "lateinisch": "Lactuca sativa var. capitata",
+    "familie": "Korbblütler", "kategorie": "blattgemuese",
+    "voranzucht": [2, 4], "direktsaat": [3, 8], "auspflanzen": [4, 8], "ernte": [5, 10],
+    "voranzuchtWochen": 4, "tageBisErnte": 45, "pflanzabstandCm": 25, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["radieschen", "moehre", "erbse", "buschbohne", "kohlrabi", "gurke", "tomate", "erdbeere", "zwiebel", "dill", "kategorie:kohl"],
+    "schlecht": ["knollensellerie", "petersilie"],
+    "hinweis": "Hoch pflanzen – der Wurzelhals soll aus der Erde schauen. Im Hochsommer schossfeste Sorten wählen."
+  },
+  {
+    "schluessel": "pfluecksalat", "name": "Pflücksalat", "lateinisch": "Lactuca sativa var. crispa",
+    "familie": "Korbblütler", "kategorie": "blattgemuese",
+    "direktsaat": [3, 8], "ernte": [5, 10],
+    "tageBisErnte": 40, "pflanzabstandCm": 25, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "hoch", "frostempfindlich": false,
+    "gut": ["radieschen", "moehre", "erbse", "buschbohne", "kohlrabi", "gurke", "tomate", "erdbeere", "zwiebel", "dill"],
+    "schlecht": ["knollensellerie", "petersilie"],
+    "hinweis": "Immer nur die äußeren Blätter pflücken – wächst wochenlang nach."
+  },
+  {
+    "schluessel": "feldsalat", "name": "Feldsalat", "lateinisch": "Valerianella locusta",
+    "familie": "Geißblattgewächse", "kategorie": "blattgemuese",
+    "direktsaat": [7, 9], "ernte": [10, 3],
+    "tageBisErnte": 70, "pflanzabstandCm": 5, "reihenabstandCm": 15,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["zwiebel", "lauch", "erdbeere", "kohlrabi"],
+    "schlecht": [],
+    "hinweis": "Perfekte Nachkultur auf abgeernteten Beeten. Winterhart, im Gewächshaus besonders zart."
+  },
+  {
+    "schluessel": "rucola", "name": "Rucola", "lateinisch": "Eruca vesicaria subsp. sativa",
+    "familie": "Kreuzblütler", "kategorie": "blattgemuese",
+    "direktsaat": [3, 9], "ernte": [4, 10],
+    "tageBisErnte": 35, "pflanzabstandCm": 5, "reihenabstandCm": 15,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["kopfsalat", "buschbohne", "moehre"],
+    "schlecht": [],
+    "hinweis": "Erdflöhe lieben Rucola – Kulturschutznetz und feucht halten hilft."
+  },
+  {
+    "schluessel": "spinat", "name": "Spinat", "lateinisch": "Spinacia oleracea",
+    "familie": "Fuchsschwanzgewächse", "kategorie": "blattgemuese",
+    "direktsaat": [3, 9], "ernte": [4, 11],
+    "tageBisErnte": 45, "pflanzabstandCm": 5, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["kategorie:kohl", "radieschen", "erdbeere", "tomate", "kartoffel", "buschbohne", "kohlrabi", "moehre", "dicke-bohne"],
+    "schlecht": ["rote-bete", "mangold"],
+    "hinweis": "Schießt im Hochsommer – am besten im Frühjahr (März/April) oder Spätsommer (August/September) säen."
+  },
+  {
+    "schluessel": "mangold", "name": "Mangold", "lateinisch": "Beta vulgaris subsp. vulgaris var. cicla",
+    "familie": "Fuchsschwanzgewächse", "kategorie": "blattgemuese",
+    "direktsaat": [4, 7], "ernte": [6, 11],
+    "tageBisErnte": 60, "pflanzabstandCm": 30, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["buschbohne", "moehre", "radieschen", "kategorie:kohl", "kopfsalat"],
+    "schlecht": ["spinat", "rote-bete"],
+    "hinweis": "Äußere Blätter laufend ernten, das Herz stehen lassen."
+  },
+  {
+    "schluessel": "rhabarber", "name": "Rhabarber", "lateinisch": "Rheum rhabarbarum",
+    "familie": "Knöterichgewächse", "kategorie": "obst",
+    "auspflanzen": [9, 11], "ernte": [4, 6],
+    "pflanzabstandCm": 100, "reihenabstandCm": 100,
+    "naehrstoffbedarf": "stark", "wasserbedarf": "hoch", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": ["knoblauch"],
+    "schlecht": [],
+    "hinweis": "Erst ab dem zweiten Standjahr ernten und nie mehr als die Hälfte der Stiele. Ernte bis zum Johannistag (24. Juni)."
+  },
+  {
+    "schluessel": "erdbeere", "name": "Erdbeere", "lateinisch": "Fragaria × ananassa",
+    "familie": "Rosengewächse", "kategorie": "obst",
+    "auspflanzen": [7, 8], "ernte": [6, 7],
+    "pflanzabstandCm": 30, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": ["knoblauch", "zwiebel", "lauch", "schnittlauch", "spinat", "kopfsalat", "buschbohne", "borretsch", "ringelblume"],
+    "schlecht": ["kategorie:kohl"],
+    "hinweis": "Im Juli/August gepflanzt tragen sie im nächsten Juni. Nach 3–4 Jahren Beet wechseln. Stroh unterlegen."
+  },
+  {
+    "schluessel": "basilikum", "name": "Basilikum", "lateinisch": "Ocimum basilicum",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "voranzucht": [3, 4], "direktsaat": [5, 6], "auspflanzen": [5, 6], "ernte": [6, 9],
+    "voranzuchtWochen": 6, "tageBisErnte": 40, "pflanzabstandCm": 20, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["tomate", "paprika", "chili", "gurke", "zucchini", "aubergine"],
+    "schlecht": [],
+    "hinweis": "Lichtkeimer. Triebspitzen ernten, damit er buschig wächst. Im Gewächshaus zwischen Tomaten ideal."
+  },
+  {
+    "schluessel": "petersilie", "name": "Petersilie", "lateinisch": "Petroselinum crispum",
+    "familie": "Doldenblütler", "kategorie": "kraeuter",
+    "direktsaat": [3, 8], "ernte": [5, 11],
+    "tageBisErnte": 70, "pflanzabstandCm": 10, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["tomate", "zwiebel", "radieschen"],
+    "schlecht": ["kopfsalat", "pfluecksalat"],
+    "hinweis": "Keimt sehr langsam (bis 4 Wochen). Nicht nach sich selbst oder anderen Doldenblütlern anbauen. Zweijährig."
+  },
+  {
+    "schluessel": "dill", "name": "Dill", "lateinisch": "Anethum graveolens",
+    "familie": "Doldenblütler", "kategorie": "kraeuter",
+    "direktsaat": [4, 7], "ernte": [6, 9],
+    "tageBisErnte": 40, "pflanzabstandCm": 10, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["gurke", "moehre", "kategorie:kohl", "zwiebel", "kopfsalat", "rote-bete"],
+    "schlecht": [],
+    "hinweis": "Direkt säen, verträgt kein Umpflanzen. Fördert die Keimung von Möhren."
+  },
+  {
+    "schluessel": "koriander", "name": "Koriander", "lateinisch": "Coriandrum sativum",
+    "familie": "Doldenblütler", "kategorie": "kraeuter",
+    "direktsaat": [4, 8], "ernte": [6, 10],
+    "tageBisErnte": 40, "pflanzabstandCm": 10, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": [],
+    "schlecht": [],
+    "hinweis": "Schießt bei Hitze schnell – satzweise säen, Halbschatten im Sommer."
+  },
+  {
+    "schluessel": "schnittlauch", "name": "Schnittlauch", "lateinisch": "Allium schoenoprasum",
+    "familie": "Amaryllisgewächse", "kategorie": "kraeuter",
+    "voranzucht": [2, 3], "direktsaat": [3, 5], "auspflanzen": [4, 5], "ernte": [4, 10],
+    "voranzuchtWochen": 6, "tageBisErnte": 60, "pflanzabstandCm": 20, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": ["moehre", "erdbeere", "tomate", "gurke"],
+    "schlecht": ["buschbohne", "erbse"],
+    "hinweis": "Alle paar Jahre teilen. Blüten sind essbar und bei Bienen beliebt."
+  },
+  {
+    "schluessel": "thymian", "name": "Thymian", "lateinisch": "Thymus vulgaris",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "voranzucht": [3, 4], "auspflanzen": [5, 6], "ernte": [5, 10],
+    "voranzuchtWochen": 8, "pflanzabstandCm": 25, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": ["kategorie:kohl"],
+    "schlecht": [],
+    "hinweis": "Sonnig und mager, keine Staunässe. Hält Kohlweißlinge fern."
+  },
+  {
+    "schluessel": "rosmarin", "name": "Rosmarin", "lateinisch": "Salvia rosmarinus",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "auspflanzen": [5, 6], "ernte": [1, 12],
+    "pflanzabstandCm": 50, "reihenabstandCm": 50,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": true, "mehrjaehrig": true,
+    "gut": [],
+    "schlecht": [],
+    "hinweis": "Nur bedingt winterhart – im Topf hell und kühl überwintern oder mit Vlies schützen."
+  },
+  {
+    "schluessel": "salbei", "name": "Salbei", "lateinisch": "Salvia officinalis",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "voranzucht": [3, 4], "auspflanzen": [5, 5], "ernte": [5, 10],
+    "voranzuchtWochen": 8, "pflanzabstandCm": 40, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": ["kategorie:kohl", "moehre"],
+    "schlecht": [],
+    "hinweis": "Im Frühjahr kräftig zurückschneiden, damit er nicht verholzt."
+  },
+  {
+    "schluessel": "oregano", "name": "Oregano", "lateinisch": "Origanum vulgare",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "voranzucht": [3, 4], "auspflanzen": [5, 5], "ernte": [6, 9],
+    "voranzuchtWochen": 8, "pflanzabstandCm": 25, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": [],
+    "schlecht": [],
+    "hinweis": "Lichtkeimer. Blüht lange und ist eine hervorragende Insektenweide."
+  },
+  {
+    "schluessel": "minze", "name": "Minze", "lateinisch": "Mentha × piperita",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "auspflanzen": [4, 5], "ernte": [5, 9],
+    "pflanzabstandCm": 40, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "hoch", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": [],
+    "schlecht": [],
+    "hinweis": "Wuchert stark – mit Wurzelsperre oder im Topf pflanzen."
+  },
+  {
+    "schluessel": "zitronenmelisse", "name": "Zitronenmelisse", "lateinisch": "Melissa officinalis",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "voranzucht": [3, 4], "auspflanzen": [5, 5], "ernte": [5, 9],
+    "voranzuchtWochen": 8, "pflanzabstandCm": 40, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": false, "mehrjaehrig": true,
+    "gut": [],
+    "schlecht": [],
+    "hinweis": "Sät sich gern selbst aus – Blütenstände rechtzeitig abschneiden."
+  },
+  {
+    "schluessel": "bohnenkraut", "name": "Bohnenkraut", "lateinisch": "Satureja hortensis",
+    "familie": "Lippenblütler", "kategorie": "kraeuter",
+    "direktsaat": [5, 6], "ernte": [7, 9],
+    "tageBisErnte": 60, "pflanzabstandCm": 20, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false,
+    "gut": ["buschbohne", "stangenbohne", "dicke-bohne"],
+    "schlecht": [],
+    "hinweis": "Zwischen Bohnen gesät hält es Bohnenläuse fern."
+  },
+  {
+    "schluessel": "ringelblume", "name": "Ringelblume", "lateinisch": "Calendula officinalis",
+    "familie": "Korbblütler", "kategorie": "blumen",
+    "direktsaat": [3, 6], "ernte": [6, 10],
+    "tageBisErnte": 60, "pflanzabstandCm": 25, "reihenabstandCm": 30,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["tomate", "kartoffel", "erdbeere", "kategorie:kohl", "zucchini"],
+    "schlecht": [],
+    "hinweis": "Gesundet den Boden (gegen Nematoden) und lockt Nützlinge an. Blüten sind essbar."
+  },
+  {
+    "schluessel": "tagetes", "name": "Tagetes (Studentenblume)", "lateinisch": "Tagetes patula",
+    "familie": "Korbblütler", "kategorie": "blumen",
+    "voranzucht": [3, 4], "auspflanzen": [5, 6], "ernte": [6, 10],
+    "voranzuchtWochen": 6, "pflanzabstandCm": 25, "reihenabstandCm": 25,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["tomate", "kartoffel", "kategorie:kohl", "aubergine"],
+    "schlecht": [],
+    "hinweis": "Wurzelausscheidungen wirken gegen Nematoden. Achtung: zieht Schnecken an – kann als Ablenkpflanze dienen."
+  },
+  {
+    "schluessel": "kapuzinerkresse", "name": "Kapuzinerkresse", "lateinisch": "Tropaeolum majus",
+    "familie": "Kapuzinerkressengewächse", "kategorie": "blumen",
+    "voranzucht": [4, 4], "direktsaat": [5, 6], "auspflanzen": [5, 6], "ernte": [6, 10],
+    "voranzuchtWochen": 4, "tageBisErnte": 50, "pflanzabstandCm": 30, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["tomate", "gurke", "zucchini", "kuerbis", "kategorie:kohl", "kartoffel", "radieschen"],
+    "schlecht": [],
+    "hinweis": "Lockt Blattläuse von anderen Kulturen weg. Blätter und Blüten sind essbar."
+  },
+  {
+    "schluessel": "borretsch", "name": "Borretsch", "lateinisch": "Borago officinalis",
+    "familie": "Raublattgewächse", "kategorie": "blumen",
+    "direktsaat": [4, 6], "ernte": [6, 9],
+    "tageBisErnte": 50, "pflanzabstandCm": 40, "reihenabstandCm": 40,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "mittel", "frostempfindlich": false,
+    "gut": ["erdbeere", "gurke", "zucchini", "kategorie:kohl"],
+    "schlecht": [],
+    "hinweis": "Bienenmagnet, verbessert die Bestäubung von Gurken und Zucchini. Sät sich selbst aus."
+  },
+  {
+    "schluessel": "sonnenblume", "name": "Sonnenblume", "lateinisch": "Helianthus annuus",
+    "familie": "Korbblütler", "kategorie": "blumen",
+    "direktsaat": [4, 5], "ernte": [8, 9],
+    "tageBisErnte": 90, "pflanzabstandCm": 50, "reihenabstandCm": 60,
+    "naehrstoffbedarf": "mittel", "wasserbedarf": "mittel", "frostempfindlich": true,
+    "gut": ["gurke", "mais", "zuckermelone"],
+    "schlecht": ["kartoffel"],
+    "hinweis": "Samenstände über den Winter stehen lassen – Futter für Vögel."
+  },
+  {
+    "schluessel": "phacelia", "name": "Phacelia (Bienenfreund)", "lateinisch": "Phacelia tanacetifolia",
+    "familie": "Raublattgewächse", "kategorie": "blumen",
+    "direktsaat": [3, 9], "ernte": [6, 10],
+    "tageBisErnte": 50,
+    "naehrstoffbedarf": "schwach", "wasserbedarf": "niedrig", "frostempfindlich": false,
+    "gut": [],
+    "schlecht": [],
+    "hinweis": "Gründüngung und Bienenweide. Mit keiner Gemüsekultur verwandt – ideal in jeder Fruchtfolge. Breitwürfig säen."
+  }
+]

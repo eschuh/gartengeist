@@ -48,10 +48,14 @@ builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGardenRepository, GardenRepository>();
 builder.Services.AddScoped<IAreaRepository, AreaRepository>();
+builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+builder.Services.AddScoped<IPlantingRepository, PlantingRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IGardenService, GardenService>();
 builder.Services.AddScoped<IAreaService, AreaService>();
+builder.Services.AddScoped<IPlantService, PlantService>();
+builder.Services.AddScoped<IPlantingService, PlantingService>();
 builder.Services.AddSingleton<GeocodingService>();
 
 builder.Services.AddHttpClient("nominatim", c =>
@@ -69,6 +73,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<GartengeistDbContext>();
     await db.Database.MigrateAsync();
+    await PlantCatalogSeeder.SeedAsync(db, app.Logger);
 }
 
 app.UseAuthentication();
