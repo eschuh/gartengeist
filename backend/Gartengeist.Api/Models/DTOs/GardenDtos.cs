@@ -15,8 +15,12 @@ public record GardenResponse(
     string? PostalCode,
     decimal Latitude,
     decimal Longitude,
-    int HouseholdSize
+    int HouseholdSize,
+    FrostDates? Frost
 );
+
+// Tage als „MM-dd“
+public record FrostDates(string? LastMedian, string? LastSafe, string? FirstMedian, string? FirstEarly);
 
 public record PlaceResult(
     string Name,

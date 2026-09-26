@@ -12,6 +12,8 @@ public class WeatherService(
     IMemoryCache cache) : IWeatherService
 {
     private const int ForecastDays = 7;
+    // Vergangene Tage für Regen seit dem Gießen und nachgetragene Tagebucheinträge
+    private const int PastDays = 7;
     private static readonly TimeSpan CacheDuration = TimeSpan.FromMinutes(30);
 
     public async Task<WeatherForecastResponse?> GetForecastAsync()
@@ -24,7 +26,7 @@ public class WeatherService(
         return await cache.GetOrCreateAsync(key, async entry =>
         {
             entry.AbsoluteExpirationRelativeToNow = CacheDuration;
-            var days = await weatherProvider.GetDailyForecastAsync(garden.Latitude, garden.Longitude, ForecastDays);
+            var days = await weatherProvider.GetDailyForecastAsync(garden.Latitude, garden.Longitude, ForecastDays, PastDays);
             return new WeatherForecastResponse(garden.LocationName, DateTimeOffset.UtcNow, days);
         });
     }

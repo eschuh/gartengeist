@@ -8,7 +8,10 @@ namespace Gartengeist.Api.Controllers;
 
 [ApiController]
 [Route("api/garten")]
-public class GardenController(IGardenService gardenService, GeocodingService geocodingService) : ControllerBase
+public class GardenController(
+    IGardenService gardenService,
+    GeocodingService geocodingService,
+    FrostDateService frostDateService) : ControllerBase
 {
     // 404 = Einrichtung noch nicht abgeschlossen
     [HttpGet]
@@ -21,8 +24,11 @@ public class GardenController(IGardenService gardenService, GeocodingService geo
     [HttpPut]
     public async Task<IActionResult> Save([FromBody] GardenRequest request)
     {
-        var garden = await gardenService.SaveAsync(request);
-        return Ok(ToResponse(garden));
+        await gardenService.SaveAsync(request);
+        // Frostdaten gleich berechnen, damit sie sofort angezeigt werden (Fehler sind nicht kritisch)
+        await frostDateService.EnsureAsync();
+        var garden = await gardenService.GetAsync();
+        return Ok(ToResponse(garden!));
     }
 
     [HttpGet("ortssuche")]
@@ -44,6 +50,9 @@ public class GardenController(IGardenService gardenService, GeocodingService geo
         garden.PostalCode,
         garden.Latitude,
         garden.Longitude,
-        garden.HouseholdSize
+        garden.HouseholdSize,
+        garden.FrostCalculatedAt is null
+            ? null
+            : new FrostDates(garden.LastFrostMedian, garden.LastFrostSafe, garden.FirstFrostMedian, garden.FirstFrostEarly)
     );
 }

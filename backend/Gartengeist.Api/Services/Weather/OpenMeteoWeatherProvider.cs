@@ -16,12 +16,29 @@ public class OpenMeteoWeatherProvider(IHttpClientFactory httpClientFactory) : IW
         "precipitation_probability_max", "sunshine_duration", "daylight_duration"
     ];
 
-    public async Task<IReadOnlyList<WeatherDay>> GetDailyForecastAsync(decimal latitude, decimal longitude, int days)
+    public async Task<IReadOnlyList<(DateOnly Date, decimal? TempMin)>> GetHistoricalMinTemperaturesAsync(
+        decimal latitude, decimal longitude, DateOnly from, DateOnly to)
+    {
+        var client = httpClientFactory.CreateClient("openmeteo-archive");
+        var url = string.Create(CultureInfo.InvariantCulture,
+            $"v1/archive?latitude={latitude}&longitude={longitude}&start_date={from:yyyy-MM-dd}&end_date={to:yyyy-MM-dd}&daily=temperature_2m_min&timezone=auto");
+
+        using var document = JsonDocument.Parse(await client.GetStringAsync(url));
+        var daily = document.RootElement.GetProperty("daily");
+        var values = daily.GetProperty("temperature_2m_min");
+        return daily.GetProperty("time").EnumerateArray()
+            .Select((d, i) => (
+                DateOnly.Parse(d.GetString()!),
+                values[i].ValueKind == JsonValueKind.Number ? values[i].GetDecimal() : (decimal?)null))
+            .ToList();
+    }
+
+    public async Task<IReadOnlyList<WeatherDay>> GetDailyForecastAsync(decimal latitude, decimal longitude, int days, int pastDays)
     {
         var client = httpClientFactory.CreateClient("openmeteo");
         var url = string.Create(CultureInfo.InvariantCulture,
             $"v1/forecast?latitude={latitude}&longitude={longitude}&daily={string.Join(',', Variables)}" +
-            $"&models={PrimaryModel},{FallbackModel}&forecast_days={days}&timezone=auto");
+            $"&models={PrimaryModel},{FallbackModel}&forecast_days={days}&past_days={pastDays}&timezone=auto");
 
         using var document = JsonDocument.Parse(await client.GetStringAsync(url));
         var daily = document.RootElement.GetProperty("daily");

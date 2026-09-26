@@ -52,6 +52,9 @@ builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
 builder.Services.AddScoped<IPlantingRepository, PlantingRepository>();
 builder.Services.AddScoped<IJournalRepository, JournalRepository>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IShoppingRepository, ShoppingRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IGardenService, GardenService>();
@@ -60,6 +63,13 @@ builder.Services.AddScoped<IPlantService, PlantService>();
 builder.Services.AddScoped<IPlantingService, PlantingService>();
 builder.Services.AddScoped<IJournalService, JournalService>();
 builder.Services.AddSingleton<PhotoStorage>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IShoppingService, ShoppingService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<FrostDateService>();
+builder.Services.AddScoped<TaskGenerator>();
+builder.Services.AddScoped<WateringService>();
+builder.Services.AddHostedService<AutomationWorker>();
 builder.Services.AddSingleton<GeocodingService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 builder.Services.AddSingleton<IWeatherProvider, OpenMeteoWeatherProvider>();
@@ -69,6 +79,11 @@ builder.Services.AddHttpClient("openmeteo", c =>
 {
     c.BaseAddress = new Uri("https://api.open-meteo.com/");
     c.Timeout = TimeSpan.FromSeconds(10);
+});
+builder.Services.AddHttpClient("openmeteo-archive", c =>
+{
+    c.BaseAddress = new Uri("https://archive-api.open-meteo.com/");
+    c.Timeout = TimeSpan.FromSeconds(30);
 });
 
 builder.Services.AddHttpClient("nominatim", c =>

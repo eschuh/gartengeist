@@ -1,14 +1,16 @@
-import { FROST_RISK_TEMP, weatherInfo, weekdayLabel, type WeatherForecast } from '../api/weather'
+import { todayIso } from '../api/plants'
+import { FROST_RISK_TEMP, upcomingDays, weatherInfo, weekdayLabel, type WeatherForecast } from '../api/weather'
 
 const fmt = (n: number | null) => (n === null ? '–' : Math.round(n).toString())
 
 export default function WeatherStrip({ forecast }: { forecast: WeatherForecast }) {
-  const hasFallback = forecast.days.some((d) => d.source === 'open-meteo')
+  const days = upcomingDays(forecast, todayIso())
+  const hasFallback = days.some((d) => d.source === 'open-meteo')
 
   return (
     <div>
       <ul className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-        {forecast.days.map((day, i) => {
+        {days.map((day, i) => {
           const info = weatherInfo(day.weatherCode)
           const frost = day.tempMin !== null && day.tempMin <= FROST_RISK_TEMP
           return (

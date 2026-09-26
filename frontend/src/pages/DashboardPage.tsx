@@ -1,10 +1,14 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import { actionsThisMonth, formatDate, monthShort, todayIso, type Plant, type Planting } from '../api/plants'
 import type { Area } from '../api/types'
 import { useCatalog } from '../api/useCatalog'
-import { FROST_RISK_TEMP, weekdayLabel, type WeatherForecast } from '../api/weather'
+import { completeTask, reopenTask, type GardenTask } from '../api/tasks'
+import { FROST_RISK_TEMP, upcomingDays, weekdayLabel, type WeatherForecast } from '../api/weather'
+import TaskRow from '../components/TaskRow'
+import UndoToast from '../components/UndoToast'
+import WateringDue from '../components/WateringDue'
 import WeatherStrip from '../components/WeatherStrip'
 import { useAuth } from '../auth/useAuth'
 import { useGarden } from '../garden/useGarden'
@@ -42,6 +46,31 @@ export default function DashboardPage() {
   const [weatherError, setWeatherError] = useState<string | null>(null)
   const [plantings, setPlantings] = useState<Planting[] | null>(null)
   const [areas, setAreas] = useState<Area[]>([])
+  const [tasks, setTasks] = useState<GardenTask[] | null>(null)
+  const [undo, setUndo] = useState<{ message: string; id: string } | null>(null)
+
+  const loadTasks = useCallback(() => {
+    api<GardenTask[]>('/api/aufgaben')
+      .then(setTasks)
+      .catch(() => setTasks([]))
+  }, [])
+
+  useEffect(loadTasks, [loadTasks])
+  const dismissUndo = useCallback(() => setUndo(null), [])
+
+  async function completeFromDashboard(task: GardenTask) {
+    await completeTask(task.id).catch(() => undefined)
+    setUndo({ message: `✓ ${task.title}`, id: task.id })
+    loadTasks()
+  }
+
+  async function undoComplete() {
+    if (!undo) return
+    const id = undo.id
+    setUndo(null)
+    await reopenTask(id).catch(() => undefined)
+    loadTasks()
+  }
 
   useEffect(() => {
     api<WeatherForecast>('/api/wetter/prognose')
@@ -61,8 +90,12 @@ export default function DashboardPage() {
   const areaById = new Map(areas.map((a) => [a.id, a]))
 
   // Frost: erster Tag mit Frostgefahr und die Kulturen, die dann Schutz brauchen
-  const frostDayIndex = forecast?.days.findIndex((d) => d.tempMin !== null && d.tempMin <= FROST_RISK_TEMP) ?? -1
-  const frostDay = frostDayIndex >= 0 ? forecast!.days[frostDayIndex] : null
+  const dueTasks = (tasks ?? []).filter((t) => t.dueDate <= today)
+  const nextTask = (tasks ?? []).find((t) => t.dueDate > today)
+
+  const upcoming = forecast ? upcomingDays(forecast, today) : []
+  const frostDayIndex = upcoming.findIndex((d) => d.tempMin !== null && d.tempMin <= FROST_RISK_TEMP)
+  const frostDay = frostDayIndex >= 0 ? upcoming[frostDayIndex] : null
   const frostAtRisk = frostDay
     ? (plantings ?? []).filter((p) => {
         if (!plantById.get(p.plantId)?.frostSensitive) return false
@@ -119,6 +152,36 @@ export default function DashboardPage() {
           )}
         </div>
       )}
+
+      <WateringDue />
+
+      <Card
+        title="Heute zu tun"
+        action={
+          <Link to="/aufgaben" className="text-sm text-accent">
+            Alle Aufgaben
+          </Link>
+        }
+      >
+        {tasks === null && <p className="text-sm">Lädt …</p>}
+        {tasks !== null && dueTasks.length === 0 && (
+          <p className="text-sm">
+            Nichts fällig.
+            {nextTask && (
+              <>
+                {' '}
+                Als Nächstes: <span className="font-medium text-heading">{nextTask.title}</span> am{' '}
+                {formatDate(nextTask.dueDate)}.
+              </>
+            )}
+          </p>
+        )}
+        <div className="flex flex-col gap-2">
+          {dueTasks.map((task) => (
+            <TaskRow key={task.id} task={task} onToggle={completeFromDashboard} overdue={task.dueDate < today} />
+          ))}
+        </div>
+      </Card>
 
       <Card title="Wetter">
         {forecast && <WeatherStrip forecast={forecast} />}
@@ -203,6 +266,8 @@ export default function DashboardPage() {
             ))}
         </div>
       </Card>
+
+      {undo && <UndoToast message={undo.message} onUndo={undoComplete} onDismiss={dismissUndo} />}
     </div>
   )
 }

@@ -24,6 +24,10 @@ public class GardenRepository(GartengeistDbContext db) : IGardenRepository
             return garden;
         }
 
+        // Neuer Standort → Frostdaten neu berechnen lassen
+        if (existing.Latitude != garden.Latitude || existing.Longitude != garden.Longitude)
+            existing.FrostCalculatedAt = null;
+
         existing.LocationName = garden.LocationName;
         existing.PostalCode = garden.PostalCode;
         existing.Latitude = garden.Latitude;
@@ -33,5 +37,18 @@ public class GardenRepository(GartengeistDbContext db) : IGardenRepository
 
         await db.SaveChangesAsync();
         return existing;
+    }
+
+    public async Task SaveFrostDatesAsync(Guid gardenId, string? lastMedian, string? lastSafe, string? firstMedian, string? firstEarly)
+    {
+        var garden = await db.Gardens.FindAsync(gardenId);
+        if (garden is null) return;
+
+        garden.LastFrostMedian = lastMedian;
+        garden.LastFrostSafe = lastSafe;
+        garden.FirstFrostMedian = firstMedian;
+        garden.FirstFrostEarly = firstEarly;
+        garden.FrostCalculatedAt = DateTimeOffset.UtcNow;
+        await db.SaveChangesAsync();
     }
 }

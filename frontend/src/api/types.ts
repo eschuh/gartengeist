@@ -4,6 +4,20 @@ export interface Garden {
   latitude: number
   longitude: number
   householdSize: number
+  // Tage als „MM-dd“; null, solange noch nicht berechnet
+  frost: {
+    lastMedian: string | null
+    lastSafe: string | null
+    firstMedian: string | null
+    firstEarly: string | null
+  } | null
+}
+
+// „04-25“ → „25.4.“
+export function formatMonthDay(monthDay: string | null): string | null {
+  if (!monthDay) return null
+  const [m, d] = monthDay.split('-').map(Number)
+  return `${d}.${m}.`
 }
 
 export interface PlaceResult {

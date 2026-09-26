@@ -24,6 +24,24 @@ public class Garden
     [Column("haushaltsgroesse")]
     public int HouseholdSize { get; set; }
 
+    // Frostdaten aus 10 Jahren Wetterhistorie als „MM-dd“ (siehe FrostDateService)
+    [Column("frost_letzter_median")]
+    public string? LastFrostMedian { get; set; }
+
+    // In 8 von 10 Jahren war der letzte Frost bis dahin vorbei
+    [Column("frost_letzter_sicher")]
+    public string? LastFrostSafe { get; set; }
+
+    [Column("frost_erster_median")]
+    public string? FirstFrostMedian { get; set; }
+
+    // In 8 von 10 Jahren kam der erste Frost erst danach
+    [Column("frost_erster_frueh")]
+    public string? FirstFrostEarly { get; set; }
+
+    [Column("frost_berechnet_am")]
+    public DateTimeOffset? FrostCalculatedAt { get; set; }
+
     [Column("created_at")]
     public DateTimeOffset CreatedAt { get; set; }
 

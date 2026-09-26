@@ -13,6 +13,9 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
     public DbSet<Planting> Plantings => Set<Planting>();
     public DbSet<JournalEntry> JournalEntries => Set<JournalEntry>();
     public DbSet<JournalPhoto> JournalPhotos => Set<JournalPhoto>();
+    public DbSet<GardenTask> Tasks => Set<GardenTask>();
+    public DbSet<ShoppingItem> ShoppingItems => Set<ShoppingItem>();
+    public DbSet<InventoryItem> InventoryItems => Set<InventoryItem>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
@@ -70,6 +73,23 @@ public class GartengeistDbContext(DbContextOptions<GartengeistDbContext> options
             entry.HasIndex(e => new { e.AreaId, e.Type, e.Date });
             entry.HasIndex(e => e.PlantingId);
         });
+
+        modelBuilder.Entity<GardenTask>(task =>
+        {
+            task.HasOne(t => t.Area).WithMany().HasForeignKey(t => t.AreaId).OnDelete(DeleteBehavior.Restrict);
+            task.HasOne(t => t.Plant).WithMany().HasForeignKey(t => t.PlantId).OnDelete(DeleteBehavior.Restrict);
+            task.HasOne<Planting>().WithMany().HasForeignKey(t => t.PlantingId).OnDelete(DeleteBehavior.SetNull);
+            task.HasOne(t => t.DoneBy).WithMany().HasForeignKey(t => t.DoneById).OnDelete(DeleteBehavior.Restrict);
+            task.HasOne(t => t.CreatedBy).WithMany().HasForeignKey(t => t.CreatedById).OnDelete(DeleteBehavior.Restrict);
+            task.HasIndex(t => t.Key).IsUnique();
+            task.HasIndex(t => new { t.DoneAt, t.DueDate });
+        });
+
+        modelBuilder.Entity<ShoppingItem>()
+            .HasOne(s => s.AddedBy).WithMany().HasForeignKey(s => s.AddedById).OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<InventoryItem>()
+            .HasOne(i => i.Plant).WithMany().HasForeignKey(i => i.PlantId).OnDelete(DeleteBehavior.SetNull);
     }
 }
 

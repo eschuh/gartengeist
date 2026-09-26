@@ -57,12 +57,12 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - Fotos als eigene Tabelle (max. 5 pro Eintrag, Dateien unter `uploads/fotos`)
 - Wetter-Snapshot (Temp min/max, Niederschlag, Wettercode) aus der Tagesprognose
 
-### Aufgaben (`tasks`)
-- `id`, `titel`, `beschreibung`
-- `faelligAm`, `wiederkehrend`, `intervallTage?`
-- `areaId?`, `plantingId?`
-- `erledigtVon?` (userId), `erledigtAm?`
-- `quelle` (manuell | ki | dokument)
+### Aufgaben (`aufgabe`)
+- `id`, `titel`, `beschreibung`, `faelligAm`, `intervallTage?` (gesetzt = wiederkehrend)
+- `kategorie` (allgemein | voranzucht | winter), `quelle` (manuell | automatisch | ki | dokument)
+- `schluessel` (eindeutig bei automatischen Aufgaben), `verworfenAm` (automatische werden verworfen statt gelöscht)
+- `flaecheId?`, `bepflanzungId?`, `pflanzeId?`, `vorgaengerId?`
+- `erledigtVon?`, `erledigtAm?`, `angelegtVon?`
 
 ### Dokumente (`documents`)
 - `id`, `dateiname`, `typ` (pdf | bild)
@@ -117,13 +117,14 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [x] Wetter-Snapshot bei Tagebucheintrag (aus der Tagesprognose)
 
 ### Phase 3 — Aufgaben & Kalender (Woche 4)
-- [ ] Aufgaben erstellen (manuell, wiederkehrend)
-- [ ] Kalenderansicht: Aufgaben + Ernte-Fenster + Aussaat-Termine
-- [ ] Aufgaben als erledigt markieren (auch vom anderen Nutzer)
-- [ ] Gießprotokoll: wann zuletzt gegossen, Warnung bei zu langer Pause
-- [ ] Voranzucht-Reminder: automatisch berechnet aus Standort + Frostdaten
-- [ ] Einkaufsliste & Vorrat
-- [ ] Wintervorbereitung-Checkliste (automatisch im Herbst)
+- [x] Aufgaben erstellen (manuell, wiederkehrend – nächste Fälligkeit ab Erledigungstag)
+- [x] Kalenderansicht: Aufgaben + erwartete Ernten + geplante Voranzucht/Auspflanzen
+- [x] Aufgaben als erledigt markieren (1 Tap, mit Rückgängig; sichtbar wer)
+- [x] Gießprotokoll: zuletzt gegossen oder Regen ≥ 5 mm, Gewächshaus 2 / Freiland 4 Tage, bei Hitze früher; Warnung + 1-Tap-Gießen
+- [x] Frostdaten aus 10 Jahren Wetterhistorie (Median + sichere Grenze 8/10 Jahre)
+- [x] Voranzucht-Reminder: für angebaute Kulturen, berechnet aus Frostdaten, Aufgabe erscheint 3 Wochen vorher
+- [x] Einkaufsliste & Vorrat (Saatgut mit Keimfähigkeit, „auf die Einkaufsliste“)
+- [x] Wintervorbereitung-Checkliste (automatisch ab August, abgestimmt auf den ersten Frost, biologisch)
 
 ### Phase 4 — Wetter (Woche 5)
 - [x] Open-Meteo Integration: 7-Tage-Prognose mit MeteoSchweiz-Modell (Schnittstelle `IWeatherProvider`, 30 min Cache)
@@ -193,4 +194,4 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ## Nächster Schritt
 
-Phase 1 und 2 sind abgeschlossen. Weiter mit Phase 3: Aufgaben (manuell, wiederkehrend), Kalender, Gießprotokoll mit Warnung, Voranzucht-Reminder, Einkaufsliste & Vorrat, Wintervorbereitung.
+Phase 1–3 sind abgeschlossen. Weiter mit Phase 4 (Wetter: historische Daten, Messwerte für nachgetragene Einträge, automatische Frost-Aufgabe, Rückblick, Jahresvergleich) oder direkt Phase 5 (KI-Assistent).

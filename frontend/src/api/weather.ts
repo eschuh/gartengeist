@@ -15,6 +15,11 @@ export interface WeatherForecast {
   days: WeatherDay[]
 }
 
+// Die Prognose enthält auch vergangene Tage (für Gießprotokoll und Tagebuch) – für die Anzeige nur ab heute
+export function upcomingDays(forecast: WeatherForecast, todayIso: string): WeatherDay[] {
+  return forecast.days.filter((d) => d.date >= todayIso)
+}
+
 // Ab dieser Lufttemperatur (2 m) ist Bodenfrost möglich
 export const FROST_RISK_TEMP = 2
 

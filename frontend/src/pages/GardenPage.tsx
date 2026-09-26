@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
 import type { Planting } from '../api/plants'
-import type { Area } from '../api/types'
+import { formatMonthDay, type Area } from '../api/types'
 import AreaCard from '../components/AreaCard'
 import { primaryButtonClass, secondaryButtonClass } from '../components/styles'
 import { useGarden } from '../garden/useGarden'
@@ -60,6 +60,12 @@ export default function GardenPage() {
               {totalSize > 0 &&
                 ` · ${totalSize.toLocaleString('de-DE', { maximumFractionDigits: 1 })} m² Anbaufläche`}
             </span>
+            {garden.frost?.lastSafe && (
+              <span className="mt-1 block text-xs">
+                ❄️ Letzter Frost meist um den {formatMonthDay(garden.frost.lastMedian)}, sicher ab{' '}
+                {formatMonthDay(garden.frost.lastSafe)} · erster Frost ab ca. {formatMonthDay(garden.frost.firstEarly)}
+              </span>
+            )}
           </span>
           <span className="text-sm text-accent">Ändern</span>
         </Link>
