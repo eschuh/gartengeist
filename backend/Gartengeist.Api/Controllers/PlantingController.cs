@@ -59,8 +59,21 @@ public class PlantingController(IPlantingService plantingService) : ControllerBa
     [HttpPost("{id:guid}/beenden")]
     public async Task<IActionResult> End(Guid id, [FromBody] EndPlantingRequest? request)
     {
-        var planting = await plantingService.EndAsync(id, request?.EndedOn);
-        return planting is null ? NotFound() : Ok(ToResponse(planting));
+        if (!Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userId)) return Unauthorized();
+        try
+        {
+            var result = await plantingService.EndAsync(id, request?.EndedOn, request?.Count, userId);
+            return result is null
+                ? NotFound()
+                : Ok(new EndPlantingResponse(
+                    ToResponse(result.Ended),
+                    result.Remaining is null ? null : ToResponse(result.Remaining),
+                    result.AreaFree));
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { fehler = ex.Message });
+        }
     }
 
     [HttpDelete("{id:guid}")]

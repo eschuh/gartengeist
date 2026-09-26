@@ -111,6 +111,15 @@ public class TaskRepository(GartengeistDbContext db) : ITaskRepository
         return await GetByIdAsync(id);
     }
 
+    // Z.B. „Tomate fertig abernten“ ist erledigt, sobald die Kultur abgeräumt ist
+    public Task CompleteOpenForPlantingAsync(Guid plantingId, Guid userId) =>
+        db.Tasks
+            .Where(t => t.PlantingId == plantingId && t.DoneAt == null && t.DismissedAt == null)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(t => t.DoneAt, DateTimeOffset.UtcNow)
+                .SetProperty(t => t.DoneById, userId)
+                .SetProperty(t => t.UpdatedAt, DateTimeOffset.UtcNow));
+
     public async Task<bool> DeleteOrDismissAsync(Guid id)
     {
         var task = await db.Tasks.FindAsync(id);

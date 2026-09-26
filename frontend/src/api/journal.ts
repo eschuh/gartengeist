@@ -1,7 +1,7 @@
 import type { User } from '../auth/context'
 import { api } from './client'
 
-export type JournalEntryType = 'notiz' | 'gegossen' | 'geduengt' | 'gejaetet' | 'geerntet'
+export type JournalEntryType = 'notiz' | 'gegossen' | 'geduengt' | 'gejaetet' | 'geerntet' | 'abgeraeumt'
 // Einträge, die mit einem Tipp (ohne Formular) angelegt werden
 export type QuickActionType = 'gegossen' | 'geduengt' | 'gejaetet'
 export const quickActionTypes: QuickActionType[] = ['gegossen', 'geduengt', 'gejaetet']
@@ -13,7 +13,11 @@ export const entryTypes: { value: JournalEntryType; label: string; icon: string 
   { value: 'geduengt', label: 'Gedüngt', icon: '🌱' },
   { value: 'gejaetet', label: 'Gejätet', icon: '🧤' },
   { value: 'geerntet', label: 'Geerntet', icon: '🧺' },
+  { value: 'abgeraeumt', label: 'Abgeräumt', icon: '🧹' },
 ]
+
+// „Abgeräumt“ entsteht beim Abräumen einer Kultur, nicht über das Eintragsformular
+export const formEntryTypes = entryTypes.filter((t) => t.value !== 'abgeraeumt')
 
 export function entryTypeInfo(type: JournalEntryType) {
   return entryTypes.find((t) => t.value === type) ?? entryTypes[0]

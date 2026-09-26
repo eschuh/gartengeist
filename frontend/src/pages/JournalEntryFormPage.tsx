@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api/client'
 import {
   entryTypes,
+  formEntryTypes,
   harvestUnits,
   MAX_PHOTOS,
   uploadPhoto,
@@ -209,7 +210,7 @@ export default function JournalEntryFormPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="grid grid-cols-5 gap-1.5">
-          {entryTypes.map((t) => (
+          {entryTypes.filter((t) => formEntryTypes.includes(t) || t.value === type).map((t) => (
             <button
               key={t.value}
               type="button"

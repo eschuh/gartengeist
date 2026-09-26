@@ -1,4 +1,5 @@
 import type { User } from '../auth/context'
+import { api } from './client'
 
 // Monate 1–12; from > to bedeutet über den Jahreswechsel (z.B. Okt–März)
 export interface MonthWindow {
@@ -108,6 +109,37 @@ export interface Planting {
   createdBy: User
   createdAt: string
   updatedAt: string
+}
+
+export interface EndPlantingResult {
+  ended: Planting
+  remaining: Planting | null
+  areaFree: boolean
+}
+
+// Ganz abräumen (count leer) oder nur einen Teil der Pflanzen
+export function endPlanting(id: string, endedOn: string, count: number | null): Promise<EndPlantingResult> {
+  return api<EndPlantingResult>(`/api/bepflanzungen/${id}/beenden`, {
+    method: 'POST',
+    body: JSON.stringify({ endedOn, count }),
+  })
+}
+
+export interface NextCropRecommendation {
+  plantId: string
+  plantName: string
+  action: 'säen' | 'pflanzen'
+  harvestFrom: string | null
+  score: number
+  reasons: string[]
+}
+
+export interface AreaRecommendations {
+  areaFree: boolean
+  freeM2: number | null
+  previousCrop: string | null
+  items: NextCropRecommendation[]
+  hint: string | null
 }
 
 export interface PlantingInput {

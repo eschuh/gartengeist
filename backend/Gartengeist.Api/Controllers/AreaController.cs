@@ -1,5 +1,6 @@
 using Gartengeist.Api.Models.DTOs;
 using Gartengeist.Api.Models.Entities;
+using Gartengeist.Api.Services;
 using Gartengeist.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,8 +8,16 @@ namespace Gartengeist.Api.Controllers;
 
 [ApiController]
 [Route("api/flaechen")]
-public class AreaController(IAreaService areaService) : ControllerBase
+public class AreaController(IAreaService areaService, RecommendationService recommendationService) : ControllerBase
 {
+    // Nachkultur-Empfehlungen: was passt jetzt auf diese Fläche?
+    [HttpGet("{id:guid}/empfehlungen")]
+    public async Task<IActionResult> Recommendations(Guid id)
+    {
+        var result = await recommendationService.GetForAreaAsync(id, DateOnly.FromDateTime(DateTime.Today));
+        return result is null ? NotFound() : Ok(result);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] bool includeArchived = false)
     {

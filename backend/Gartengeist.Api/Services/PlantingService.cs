@@ -8,7 +8,9 @@ namespace Gartengeist.Api.Services;
 public class PlantingService(
     IPlantingRepository plantingRepository,
     IPlantRepository plantRepository,
-    IAreaRepository areaRepository) : IPlantingService
+    IAreaRepository areaRepository,
+    IJournalRepository journalRepository,
+    ITaskRepository taskRepository) : IPlantingService
 {
     public Task<IEnumerable<Planting>> GetAllAsync(Guid? areaId, bool includeEnded) =>
         plantingRepository.GetAllAsync(areaId, includeEnded);
@@ -30,8 +32,40 @@ public class PlantingService(
         return await plantingRepository.UpdateAsync(planting);
     }
 
-    public Task<Planting?> EndAsync(Guid id, DateOnly? endedOn) =>
-        plantingRepository.EndAsync(id, endedOn ?? DateOnly.FromDateTime(DateTime.Today));
+    // Abräumen – ganz oder nur ein Teil der Pflanzen. Beim Teil-Abräumen wird die Kultur aufgeteilt:
+    // der abgeräumte Teil wird als beendete Kultur gespeichert (Verlauf/Fruchtfolge), der Rest bleibt stehen.
+    public async Task<EndPlantingResult?> EndAsync(Guid id, DateOnly? endedOn, int? count, Guid userId)
+    {
+        var planting = await plantingRepository.GetByIdAsync(id);
+        if (planting is null) return null;
+        if (planting.EndedOn is not null) throw new ArgumentException("Diese Kultur ist bereits abgeräumt.");
+
+        var date = endedOn ?? DateOnly.FromDateTime(DateTime.Today);
+        // Vor dem Aufteilen merken – das Repository ändert dieselbe (getrackte) Instanz
+        var totalBefore = planting.Count;
+        var partial = count is { } c && planting.Count is { } total && c < total;
+        if (count is not null && planting.Count is null)
+            throw new ArgumentException("Für teilweises Abräumen bitte zuerst die Anzahl der Pflanzen eintragen.");
+
+        var ended = partial
+            ? await plantingRepository.SplitEndAsync(id, count!.Value, date)
+            : await plantingRepository.EndAsync(id, date);
+        var remaining = partial ? await plantingRepository.GetByIdAsync(id) : null;
+        if (!partial) await taskRepository.CompleteOpenForPlantingAsync(id, userId);
+
+        await journalRepository.CreateAsync(new JournalEntry
+        {
+            Date = date,
+            Type = JournalEntryType.Abgeraeumt,
+            AreaId = planting.AreaId,
+            PlantingId = ended!.Id,
+            UserId = userId,
+            Text = partial ? $"{count} von {totalBefore} Pflanzen" : null
+        });
+
+        var areaFree = !(await plantingRepository.GetAllAsync(planting.AreaId, includeEnded: false)).Any();
+        return new EndPlantingResult(ended, remaining, areaFree);
+    }
 
     public Task<bool> DeleteAsync(Guid id) =>
         plantingRepository.DeleteAsync(id);

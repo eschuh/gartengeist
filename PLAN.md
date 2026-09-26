@@ -48,7 +48,8 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - `sorte`, `anzahl`
 - `aussaatDatum`, `pflanzDatum`
 - `voraussichtlicheErnte` (berechnet aus Datum + Kulturdauer)
-- `notizen`, `beendetAm` (abgeerntet; bleibt für Fruchtfolge erhalten), `angelegtVon`
+- `notizen`, `beendetAm` (abgeräumt; bleibt für Fruchtfolge erhalten), `angelegtVon`
+- Teilweise abräumen: Kultur wird aufgeteilt (abgeräumter Teil als beendete Kultur, Rest bleibt stehen)
 
 ### Tagebuch (`tagebuch_eintrag`, `tagebuch_foto`)
 - `id`, `nutzerId`, `datum`, `typ` (notiz | gegossen | geduengt | gejaetet | geerntet)
@@ -115,6 +116,8 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [x] Wer hat was eingetragen (Nutzername + Avatar)
 - [x] Foto-Verlauf pro Kultur (Entwicklung über Zeit)
 - [x] Wetter-Snapshot bei Tagebucheintrag (aus der Tagesprognose)
+- [x] Kultur abräumen (ganz oder teilweise) mit Tagebucheintrag; zugehörige Aufgaben (z.B. „fertig abernten“) werden erledigt
+- [x] Nachkultur-Empfehlungen für frei gewordene Flächen (Saison, Frost, Fruchtfolge, Nährstoffbedarf, Nachbarn, freie m²); „Frei geworden“ auf der Übersicht
 
 ### Phase 3 — Aufgaben & Kalender (Woche 4)
 - [x] Aufgaben erstellen (manuell, wiederkehrend – nächste Fälligkeit ab Erledigungstag)

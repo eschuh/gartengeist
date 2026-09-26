@@ -12,7 +12,10 @@ public record PlantingRequest(
     [MaxLength(2000)] string? Notes
 );
 
-public record EndPlantingRequest(DateOnly? EndedOn);
+// Count gesetzt und kleiner als die Anzahl der Kultur = nur teilweise abräumen
+public record EndPlantingRequest(DateOnly? EndedOn, [Range(1, 10000)] int? Count);
+
+public record EndPlantingResponse(PlantingResponse Ended, PlantingResponse? Remaining, bool AreaFree);
 
 public record PlantingResponse(
     Guid Id,

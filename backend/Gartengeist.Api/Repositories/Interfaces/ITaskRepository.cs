@@ -14,4 +14,5 @@ public interface ITaskRepository
     Task<GardenTask?> CompleteAsync(Guid id, Guid userId, GardenTask? next);
     Task<GardenTask?> ReopenAsync(Guid id);
     Task<bool> DeleteOrDismissAsync(Guid id);
+    Task CompleteOpenForPlantingAsync(Guid plantingId, Guid userId);
 }

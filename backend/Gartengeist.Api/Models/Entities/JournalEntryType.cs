@@ -6,5 +6,7 @@ public enum JournalEntryType
     Gegossen,
     Geduengt,
     Gejaetet,
+    // Wird beim Abräumen einer Kultur automatisch angelegt
+    Abgeraeumt,
     Geerntet
 }

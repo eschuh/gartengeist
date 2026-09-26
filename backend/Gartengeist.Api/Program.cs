@@ -69,6 +69,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<FrostDateService>();
 builder.Services.AddScoped<TaskGenerator>();
 builder.Services.AddScoped<WateringService>();
+builder.Services.AddScoped<RecommendationService>();
 builder.Services.AddHostedService<AutomationWorker>();
 builder.Services.AddSingleton<GeocodingService>();
 builder.Services.AddScoped<IWeatherService, WeatherService>();

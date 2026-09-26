@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { api } from '../api/client'
 import {
   companionReport,
@@ -7,12 +7,14 @@ import {
   formatDate,
   inWindow,
   todayIso,
+  type EndPlantingResult,
   type Plant,
   type Planting,
   type PlantingInput,
 } from '../api/plants'
 import { areaSizeM2, type Area } from '../api/types'
 import { useCatalog } from '../api/useCatalog'
+import ClearPlantingSheet from '../components/ClearPlantingSheet'
 import PlantingHistory from '../components/PlantingHistory'
 import PlantPicker from '../components/PlantPicker'
 import { inputClass, labelClass, primaryButtonClass, secondaryButtonClass } from '../components/styles'
@@ -25,6 +27,12 @@ export default function PlantingFormPage() {
   const isNew = id === undefined
   const navigate = useNavigate()
   const { plants: catalog, error: catalogError } = useCatalog()
+  // Aus den Nachkultur-Empfehlungen: ?pflanze=<id>&aktion=säen|pflanzen
+  const [searchParams] = useSearchParams()
+  const presetPlantId = isNew ? searchParams.get('pflanze') : null
+  const presetAction = searchParams.get('aktion')
+  const [presetDismissed, setPresetDismissed] = useState(false)
+  const [clearing, setClearing] = useState(false)
 
   const [existing, setExisting] = useState<Planting | null>(null)
   const [area, setArea] = useState<Area | null>(null)
@@ -34,8 +42,8 @@ export default function PlantingFormPage() {
   const [pickedPlant, setPickedPlant] = useState<Plant | null>(null)
   const [variety, setVariety] = useState('')
   const [count, setCount] = useState('')
-  const [sowingDate, setSowingDate] = useState('')
-  const [plantingDate, setPlantingDate] = useState('')
+  const [sowingDate, setSowingDate] = useState(presetPlantId && presetAction === 'säen' ? todayIso() : '')
+  const [plantingDate, setPlantingDate] = useState(presetPlantId && presetAction === 'pflanzen' ? todayIso() : '')
   const [notes, setNotes] = useState('')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,8 +72,13 @@ export default function PlantingFormPage() {
     load().catch((err) => setLoadError(err instanceof Error ? err.message : 'Laden fehlgeschlagen'))
   }, [areaIdParam, id, isNew])
 
-  // Neu: vom Nutzer gewählt. Bearbeiten: die Pflanze der bestehenden Bepflanzung (nicht änderbar).
-  const plant = pickedPlant ?? (existing && catalog ? (catalog.find((p) => p.id === existing.plantId) ?? null) : null)
+  // Neu: vom Nutzer gewählt oder aus der Empfehlung vorbelegt.
+  // Bearbeiten: die Pflanze der bestehenden Bepflanzung (nicht änderbar).
+  const presetPlant = presetPlantId && !presetDismissed ? (catalog?.find((p) => p.id === presetPlantId) ?? null) : null
+  const plant =
+    pickedPlant ??
+    presetPlant ??
+    (existing && catalog ? (catalog.find((p) => p.id === existing.plantId) ?? null) : null)
 
   const others = useMemo(
     () => (areaPlantings ?? []).filter((p) => p.id !== existing?.id),
@@ -117,18 +130,13 @@ export default function PlantingFormPage() {
     }
   }
 
-  async function endPlanting() {
-    if (!existing || !confirm(`${existing.plantName} als abgeerntet/abgeräumt markieren?`)) return
-    try {
-      await api(`/api/bepflanzungen/${existing.id}/beenden`, { method: 'POST', body: JSON.stringify({ endedOn: todayIso() }) })
-      navigate(`/garten/flaechen/${existing.areaId}`)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Fehlgeschlagen')
-    }
+  function handleCleared(result: EndPlantingResult) {
+    setClearing(false)
+    navigate(`/garten/flaechen/${result.ended.areaId}`, { state: { justFreed: result.areaFree } })
   }
 
   async function deletePlanting() {
-    if (!existing || !confirm(`Eintrag „${existing.plantName}“ endgültig löschen? Nur für Fehleinträge – sonst lieber „Abgeerntet“.`)) return
+    if (!existing || !confirm(`Eintrag „${existing.plantName}“ endgültig löschen? Nur für Fehleinträge – sonst lieber „Abräumen“.`)) return
     try {
       await api(`/api/bepflanzungen/${existing.id}`, { method: 'DELETE' })
       navigate(`/garten/flaechen/${existing.areaId}`)
@@ -161,8 +169,13 @@ export default function PlantingFormPage() {
   const companions = companionReport(plant, neighbors)
   const rotationConflicts = findRotationConflicts(plant, area, others, catalog)
   const harvest = estimateHarvest(plant, sowingDate || null, plantingDate || null)
+  // Platz auf dem noch freien Teil der Fläche (laufende Kulturen mit bekannter Anzahl abgezogen)
   const areaM2 = areaSizeM2(area)
-  const fitsPlants = areaM2 && plant.spacePerPlantM2 ? Math.floor(areaM2 / plant.spacePerPlantM2) : null
+  const usedM2 = others
+    .filter((p) => !p.endedOn && p.count != null)
+    .reduce((sum, p) => sum + (p.count ?? 0) * (catalog.find((c) => c.id === p.plantId)?.spacePerPlantM2 ?? 0), 0)
+  const freeM2 = areaM2 !== null ? Math.max(0, areaM2 - usedM2) : null
+  const fitsPlants = freeM2 && plant.spacePerPlantM2 ? Math.floor(freeM2 / plant.spacePerPlantM2) : null
 
   return (
     <section>
@@ -173,7 +186,14 @@ export default function PlantingFormPage() {
           <p className="text-sm">auf {area.name}</p>
         </div>
         {isNew && (
-          <button type="button" onClick={() => setPickedPlant(null)} className="min-h-11 text-sm text-accent">
+          <button
+            type="button"
+            onClick={() => {
+              setPickedPlant(null)
+              setPresetDismissed(true)
+            }}
+            className="min-h-11 text-sm text-accent"
+          >
             Andere Pflanze
           </button>
         )}
@@ -228,7 +248,9 @@ export default function PlantingFormPage() {
           />
           {fitsPlants !== null && fitsPlants > 0 && (
             <p className="mt-1 text-xs">
-              Die Fläche bietet Platz für ca. {fitsPlants} {plant.name}-Pflanzen (bei voller Belegung).
+              {usedM2 > 0
+                ? `Auf dem freien Teil (ca. ${freeM2!.toLocaleString('de-DE', { maximumFractionDigits: 1 })} m²) ist Platz für ca. ${fitsPlants} ${plant.name}-Pflanzen.`
+                : `Die Fläche bietet Platz für ca. ${fitsPlants} ${plant.name}-Pflanzen (bei voller Belegung).`}
             </p>
           )}
         </div>
@@ -290,14 +312,18 @@ export default function PlantingFormPage() {
       {existing && (
         <div className="mt-8 flex flex-col gap-3">
           {!existing.endedOn && (
-            <button type="button" onClick={endPlanting} className={secondaryButtonClass}>
-              Abgeerntet / abgeräumt
+            <button type="button" onClick={() => setClearing(true)} className={secondaryButtonClass}>
+              🧹 Abräumen
             </button>
           )}
           <button type="button" onClick={deletePlanting} className="min-h-11 text-sm text-danger">
             Eintrag löschen
           </button>
         </div>
+      )}
+
+      {clearing && existing && (
+        <ClearPlantingSheet planting={existing} onDone={handleCleared} onClose={() => setClearing(false)} />
       )}
     </section>
   )

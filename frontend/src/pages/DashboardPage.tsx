@@ -14,6 +14,7 @@ import { useAuth } from '../auth/useAuth'
 import { useGarden } from '../garden/useGarden'
 
 const HARVEST_LOOKAHEAD_DAYS = 21
+const FREED_AREA_DAYS = 30
 // Im Gewächshaus/Tomatenhaus erst bei echtem Frost warnen
 const GREENHOUSE_FROST_TEMP = -1
 
@@ -44,7 +45,8 @@ export default function DashboardPage() {
 
   const [forecast, setForecast] = useState<WeatherForecast | null>(null)
   const [weatherError, setWeatherError] = useState<string | null>(null)
-  const [plantings, setPlantings] = useState<Planting[] | null>(null)
+  // Inklusive abgeräumter Kulturen (für „frei geworden“); laufende siehe `plantings`
+  const [allPlantings, setAllPlantings] = useState<Planting[] | null>(null)
   const [areas, setAreas] = useState<Area[]>([])
   const [tasks, setTasks] = useState<GardenTask[] | null>(null)
   const [undo, setUndo] = useState<{ message: string; id: string } | null>(null)
@@ -76,9 +78,9 @@ export default function DashboardPage() {
     api<WeatherForecast>('/api/wetter/prognose')
       .then(setForecast)
       .catch((err) => setWeatherError(err instanceof Error ? err.message : 'Wetter nicht verfügbar'))
-    api<Planting[]>('/api/bepflanzungen')
-      .then(setPlantings)
-      .catch(() => setPlantings([]))
+    api<Planting[]>('/api/bepflanzungen?includeEnded=true')
+      .then(setAllPlantings)
+      .catch(() => setAllPlantings([]))
     api<Area[]>('/api/flaechen')
       .then(setAreas)
       .catch(() => setAreas([]))
@@ -90,6 +92,18 @@ export default function DashboardPage() {
   const areaById = new Map(areas.map((a) => [a.id, a]))
 
   // Frost: erster Tag mit Frostgefahr und die Kulturen, die dann Schutz brauchen
+  const plantings = allPlantings?.filter((p) => !p.endedOn) ?? null
+
+  // Flächen, auf denen in den letzten 30 Tagen die letzte Kultur abgeräumt wurde
+  const freedAreas = areas.filter((area) => {
+    const onArea = (allPlantings ?? []).filter((p) => p.areaId === area.id)
+    return (
+      onArea.length > 0 &&
+      onArea.every((p) => p.endedOn) &&
+      onArea.some((p) => daysBetween(p.endedOn!, today) <= FREED_AREA_DAYS)
+    )
+  })
+
   const dueTasks = (tasks ?? []).filter((t) => t.dueDate <= today)
   const nextTask = (tasks ?? []).find((t) => t.dueDate > today)
 
@@ -154,6 +168,24 @@ export default function DashboardPage() {
       )}
 
       <WateringDue />
+
+      {freedAreas.length > 0 && (
+        <Card title="🧹 Frei geworden">
+          <ul className="flex flex-col gap-2">
+            {freedAreas.map((area) => (
+              <li key={area.id}>
+                <Link
+                  to={`/garten/flaechen/${area.id}`}
+                  className="flex min-h-12 items-center justify-between gap-3 rounded-xl bg-surface px-4 py-2"
+                >
+                  <span className="font-medium text-heading">{area.name}</span>
+                  <span className="text-sm text-accent">Was passt jetzt? ›</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
 
       <Card
         title="Heute zu tun"

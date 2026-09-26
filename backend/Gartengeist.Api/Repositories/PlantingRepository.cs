@@ -68,11 +68,45 @@ public class PlantingRepository(GartengeistDbContext db) : IPlantingRepository
         return await GetByIdAsync(id);
     }
 
+    // Teil abräumen: Anzahl der Kultur verringern und den abgeräumten Teil als eigene, beendete Kultur ablegen
+    public async Task<Planting?> SplitEndAsync(Guid id, int count, DateOnly endedOn)
+    {
+        var planting = await db.Plantings.FindAsync(id);
+        if (planting is not { Count: { } total } || count >= total) return null;
+
+        planting.Count = total - count;
+        planting.UpdatedAt = DateTimeOffset.UtcNow;
+
+        var ended = new Planting
+        {
+            Id = Guid.NewGuid(),
+            AreaId = planting.AreaId,
+            PlantId = planting.PlantId,
+            Variety = planting.Variety,
+            Count = count,
+            SowingDate = planting.SowingDate,
+            PlantingDate = planting.PlantingDate,
+            ExpectedHarvest = planting.ExpectedHarvest,
+            Notes = planting.Notes,
+            EndedOn = endedOn,
+            CreatedById = planting.CreatedById,
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow
+        };
+        db.Plantings.Add(ended);
+        await db.SaveChangesAsync();
+        return await GetByIdAsync(ended.Id);
+    }
+
+    // Nur für Fehleinträge. Tagebucheinträge bleiben erhalten, verlieren aber den Bezug zur Kultur.
     public async Task<bool> DeleteAsync(Guid id)
     {
         var planting = await db.Plantings.FindAsync(id);
         if (planting is null) return false;
 
+        await db.JournalEntries
+            .Where(e => e.PlantingId == id)
+            .ExecuteUpdateAsync(s => s.SetProperty(e => e.PlantingId, (Guid?)null));
         db.Plantings.Remove(planting);
         await db.SaveChangesAsync();
         return true;
