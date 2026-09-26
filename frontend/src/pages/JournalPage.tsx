@@ -1,7 +1,16 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
-import { dayLabel, deleteEntries, entryTypes, type JournalEntry, type JournalEntryType } from '../api/journal'
+import {
+  dayLabel,
+  deleteEntries,
+  entryTypeInfo,
+  entryTypes,
+  quickActionTypes,
+  type JournalEntry,
+  type JournalEntryType,
+  type QuickActionType,
+} from '../api/journal'
 import { todayIso } from '../api/plants'
 import type { Area } from '../api/types'
 import JournalEntryCard from '../components/JournalEntryCard'
@@ -21,7 +30,7 @@ export default function JournalPage() {
   const [typeFilter, setTypeFilter] = useState<JournalEntryType | ''>('')
   const [limit, setLimit] = useState(PAGE_SIZE)
   const [error, setError] = useState<string | null>(null)
-  const [sheet, setSheet] = useState<'gegossen' | 'geduengt' | null>(null)
+  const [sheet, setSheet] = useState<QuickActionType | null>(null)
   const [undo, setUndo] = useState<{ message: string; ids: string[] } | null>(null)
 
   const load = useCallback(() => {
@@ -68,17 +77,20 @@ export default function JournalPage() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-4 gap-2">
-        <button type="button" className={actionButton} onClick={() => setSheet('gegossen')}>
-          <span className="text-xl">💧</span>Gegossen
-        </button>
-        <button type="button" className={actionButton} onClick={() => setSheet('geduengt')}>
-          <span className="text-xl">🌱</span>Gedüngt
-        </button>
-        <Link to="/tagebuch/neu?typ=geerntet" className={actionButton}>
+      <div className="grid grid-cols-6 gap-2">
+        {quickActionTypes.map((type) => {
+          const info = entryTypeInfo(type)
+          return (
+            <button key={type} type="button" className={`${actionButton} col-span-2`} onClick={() => setSheet(type)}>
+              <span className="text-xl">{info.icon}</span>
+              {info.label}
+            </button>
+          )
+        })}
+        <Link to="/tagebuch/neu?typ=geerntet" className={`${actionButton} col-span-3`}>
           <span className="text-xl">🧺</span>Ernte
         </Link>
-        <Link to="/tagebuch/neu" className={actionButton}>
+        <Link to="/tagebuch/neu" className={`${actionButton} col-span-3`}>
           <span className="text-xl">📷</span>Eintrag
         </Link>
       </div>

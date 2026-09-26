@@ -51,7 +51,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - `notizen`, `beendetAm` (abgeerntet; bleibt für Fruchtfolge erhalten), `angelegtVon`
 
 ### Tagebuch (`tagebuch_eintrag`, `tagebuch_foto`)
-- `id`, `nutzerId`, `datum`, `typ` (notiz | gegossen | geduengt | geerntet)
+- `id`, `nutzerId`, `datum`, `typ` (notiz | gegossen | geduengt | gejaetet | geerntet)
 - `text`, `flaecheId?`, `bepflanzungId?`
 - `menge`, `einheit` (kg | g | stueck | bund) – nur bei `geerntet`
 - Fotos als eigene Tabelle (max. 5 pro Eintrag, Dateien unter `uploads/fotos`)
@@ -109,7 +109,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 ### Phase 2 — Tagebuch & Fotos (Woche 3)
 - [x] Tagebucheinträge erstellen mit Datum, Text, Fläche/Pflanze
 - [x] Foto-Upload (Kamera/Galerie auf Handy, max 5 Fotos/Eintrag, vor Upload auf 2000 px verkleinert)
-- [x] Schnell-Aktionen: „gegossen", „gedüngt" per 1 Tap auf der Fläche (mehrere Flächen über Tagebuch), mit Rückgängig; „geerntet" mit Menge
+- [x] Schnell-Aktionen: „gegossen", „gedüngt", „gejätet" per 1 Tap auf der Fläche (mehrere Flächen über Tagebuch), mit Rückgängig; „geerntet" mit Menge
 - [x] Ernte-Log: Menge erfassen (kg/g/Stück/Bund), Saison-Summe pro Kultur, Jahresübersicht
 - [x] Einträge nach Fläche und Typ filtern (zeitlich gruppiert)
 - [x] Wer hat was eingetragen (Nutzername + Avatar)

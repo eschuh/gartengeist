@@ -4,7 +4,7 @@ namespace Gartengeist.Api.Models.DTOs;
 
 public record JournalEntryRequest(
     [Required] DateOnly Date,
-    [Required, RegularExpression("notiz|gegossen|geduengt|geerntet", ErrorMessage = "Unbekannter Eintragstyp.")]
+    [Required, RegularExpression("notiz|gegossen|geduengt|gejaetet|geerntet", ErrorMessage = "Unbekannter Eintragstyp.")]
     string Type,
     [MaxLength(5000)] string? Text,
     Guid? AreaId,
@@ -15,7 +15,7 @@ public record JournalEntryRequest(
 
 // Schnell-Aktion: ein Eintrag pro Fläche mit einem Tipp
 public record QuickActionRequest(
-    [Required, RegularExpression("gegossen|geduengt", ErrorMessage = "Unbekannte Schnell-Aktion.")] string Type,
+    [Required, RegularExpression("gegossen|geduengt|gejaetet", ErrorMessage = "Unbekannte Schnell-Aktion.")] string Type,
     [Required, MinLength(1)] Guid[] AreaIds,
     DateOnly? Date
 );

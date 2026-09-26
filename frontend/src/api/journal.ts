@@ -1,13 +1,17 @@
 import type { User } from '../auth/context'
 import { api } from './client'
 
-export type JournalEntryType = 'notiz' | 'gegossen' | 'geduengt' | 'geerntet'
+export type JournalEntryType = 'notiz' | 'gegossen' | 'geduengt' | 'gejaetet' | 'geerntet'
+// Einträge, die mit einem Tipp (ohne Formular) angelegt werden
+export type QuickActionType = 'gegossen' | 'geduengt' | 'gejaetet'
+export const quickActionTypes: QuickActionType[] = ['gegossen', 'geduengt', 'gejaetet']
 export type HarvestUnit = 'kg' | 'g' | 'stueck' | 'bund'
 
 export const entryTypes: { value: JournalEntryType; label: string; icon: string }[] = [
   { value: 'notiz', label: 'Notiz', icon: '📝' },
   { value: 'gegossen', label: 'Gegossen', icon: '💧' },
   { value: 'geduengt', label: 'Gedüngt', icon: '🌱' },
+  { value: 'gejaetet', label: 'Gejätet', icon: '🧤' },
   { value: 'geerntet', label: 'Geerntet', icon: '🧺' },
 ]
 
@@ -98,7 +102,7 @@ export async function uploadPhoto(entryId: string, file: File): Promise<JournalP
   return api<JournalPhoto>(`/api/tagebuch/${entryId}/fotos`, { method: 'POST', body: form })
 }
 
-export function quickAction(type: 'gegossen' | 'geduengt', areaIds: string[]): Promise<JournalEntry[]> {
+export function quickAction(type: QuickActionType, areaIds: string[]): Promise<JournalEntry[]> {
   return api<JournalEntry[]>('/api/tagebuch/schnell', {
     method: 'POST',
     body: JSON.stringify({ type, areaIds }),

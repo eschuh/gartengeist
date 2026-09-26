@@ -208,7 +208,7 @@ export default function JournalEntryFormPage() {
       <h1 className="mb-4 text-xl font-semibold text-heading">{isNew ? 'Neuer Eintrag' : 'Eintrag bearbeiten'}</h1>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-5 gap-1.5">
           {entryTypes.map((t) => (
             <button
               key={t.value}

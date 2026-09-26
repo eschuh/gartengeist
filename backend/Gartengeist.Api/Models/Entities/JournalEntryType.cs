@@ -5,5 +5,6 @@ public enum JournalEntryType
     Notiz,
     Gegossen,
     Geduengt,
+    Gejaetet,
     Geerntet
 }

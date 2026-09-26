@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gartengeist.Api.Models.Entities;
 
-// Tagebucheintrag. Schnell-Aktionen (gegossen/gedüngt) und Ernten sind ebenfalls Einträge,
+// Tagebucheintrag. Schnell-Aktionen (gegossen/gedüngt/gejätet) und Ernten sind ebenfalls Einträge,
 // damit alles in einer Zeitleiste steht – mit Person, Wetter und Fotos.
 [Table("tagebuch_eintrag")]
 public class JournalEntry

@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api } from '../api/client'
-import { daysAgoLabel, deleteEntries, quickAction, type JournalEntry } from '../api/journal'
+import {
+  daysAgoLabel,
+  deleteEntries,
+  entryTypeInfo,
+  quickAction,
+  quickActionTypes,
+  type JournalEntry,
+  type QuickActionType,
+} from '../api/journal'
 import { todayIso } from '../api/plants'
 import JournalEntryCard from './JournalEntryCard'
 import UndoToast from './UndoToast'
@@ -9,7 +17,7 @@ import UndoToast from './UndoToast'
 const RECENT_COUNT = 5
 
 const actionButton =
-  'flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-xl border border-border bg-surface text-sm font-medium text-heading disabled:opacity-60'
+  'flex min-h-14 flex-col items-center justify-center gap-0.5 rounded-xl border border-border bg-surface text-xs font-medium text-heading disabled:opacity-60'
 
 // Schnell-Aktionen (1 Tap) und letzte Tagebucheinträge einer Fläche
 export default function AreaJournal({ areaId }: { areaId: string }) {
@@ -32,12 +40,13 @@ export default function AreaJournal({ areaId }: { areaId: string }) {
 
   const dismissUndo = useCallback(() => setUndo(null), [])
 
-  async function run(type: 'gegossen' | 'geduengt') {
+  async function run(type: QuickActionType) {
     setBusy(true)
     setError(null)
     try {
       const created = await quickAction(type, [areaId])
-      setUndo({ message: type === 'gegossen' ? '💧 Gegossen eingetragen' : '🌱 Gedüngt eingetragen', ids: created.map((e) => e.id) })
+      const info = entryTypeInfo(type)
+      setUndo({ message: `${info.icon} ${info.label} eingetragen`, ids: created.map((e) => e.id) })
       load()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Fehlgeschlagen')
@@ -59,15 +68,18 @@ export default function AreaJournal({ areaId }: { areaId: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <div className="grid grid-cols-3 gap-2">
-          <button type="button" className={actionButton} onClick={() => run('gegossen')} disabled={busy}>
-            <span className="text-lg">💧</span>Gegossen
-          </button>
-          <button type="button" className={actionButton} onClick={() => run('geduengt')} disabled={busy}>
-            <span className="text-lg">🌱</span>Gedüngt
-          </button>
+        <div className="grid grid-cols-4 gap-2">
+          {quickActionTypes.map((type) => {
+            const info = entryTypeInfo(type)
+            return (
+              <button key={type} type="button" className={actionButton} onClick={() => run(type)} disabled={busy}>
+                <span className="text-lg">{info.icon}</span>
+                {info.label}
+              </button>
+            )
+          })}
           <Link to={`/tagebuch/neu?flaeche=${areaId}`} className={actionButton}>
-            <span className="text-lg">📷</span>Notiz / Foto
+            <span className="text-lg">📷</span>Notiz
           </Link>
         </div>
         <p className="mt-2 text-xs">

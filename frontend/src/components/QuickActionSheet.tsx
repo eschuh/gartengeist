@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { entryTypeInfo, quickAction, type JournalEntry } from '../api/journal'
+import { entryTypeInfo, quickAction, type JournalEntry, type QuickActionType } from '../api/journal'
 import type { Area } from '../api/types'
 import { primaryButtonClass } from './styles'
 
 interface QuickActionSheetProps {
-  type: 'gegossen' | 'geduengt'
+  type: QuickActionType
   areas: Area[]
   onDone: (entries: JournalEntry[]) => void
   onClose: () => void
