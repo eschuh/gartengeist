@@ -170,7 +170,7 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 - [x] Deploy-Skript vom PC aus (`deploy/deploy.ps1`), inkl. Übernahme der lokalen Daten
 - [x] Registrierung nur mit Einladungscode, Login-Rate-Limit
 - [x] PWA: installierbar auf dem Homescreen, zuletzt geladene Daten offline lesbar
-- [ ] Server mieten und erstes Deployment (siehe DEPLOY.md)
+- [x] Server gemietet (Hetzner, Helsinki) und erstes Deployment am 2026-09-26: https://2-29-56-102.sslip.io
 
 ---
 
