@@ -96,13 +96,13 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 ## Features nach Phase
 
 ### Phase 1 — Grundstruktur (Woche 1–2)
-- [ ] Projekt-Setup: Backend (ASP.NET), Frontend (React), Postgres, Docker Compose
-- [ ] Auth: Registrierung, Login, JWT
+- [x] Projekt-Setup: Backend (ASP.NET), Frontend (React), Postgres, Docker Compose
+- [x] Auth: Registrierung, Login, JWT
 - [ ] Einrichtungs-Wizard: Standort, Flächen anlegen, Haushaltsgröße
 - [ ] Flächen-Verwaltung (CRUD)
 - [ ] Pflanzen-Katalog (Basis-Daten mit ~50 Gemüse/Kräuter, inkl. Saatgut-Scanner via Foto)
 - [ ] Bepflanzung anlegen (was steht wo, Aussaat-/Pflanzungsdatum)
-- [ ] Mobile Navigation (Bottom-Nav)
+- [x] Mobile Navigation (Bottom-Nav)
 - [ ] Dashboard: heutige Aufgaben, nächste Ernte, Wetterwarnung
 
 ### Phase 2 — Tagebuch & Fotos (Woche 3)
@@ -188,4 +188,4 @@ Gartengeist ist ein KI-gestützter Gartenassistent für zwei Nutzer (Login-basie
 
 ## Nächster Schritt
 
-Projekt-Setup: Docker Compose (Postgres), Backend-Grundgerüst (ASP.NET), Frontend-Grundgerüst (React + Tailwind), Auth-Endpunkte.
+Einrichtungs-Wizard (Standort, Flächen, Haushaltsgröße) und Flächen-Verwaltung.

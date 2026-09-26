@@ -1,0 +1,30 @@
+@host = http://localhost:5101
+
+GET {{host}}/health
+
+###
+
+POST {{host}}/api/auth/registrieren
+Content-Type: application/json
+
+{
+  "name": "Eva",
+  "email": "eva@example.com",
+  "password": "geheim1234"
+}
+
+###
+
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "eva@example.com",
+  "password": "geheim1234"
+}
+
+###
+
+GET {{host}}/api/auth/ich
+Authorization: Bearer {{login.response.body.token}}

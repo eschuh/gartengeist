@@ -1,0 +1,23 @@
+# Umgebungsvariablen (niemals einchecken)
+.env
+
+# .NET
+backend/**/bin/
+backend/**/obj/
+backend/**/*.user
+
+# Node / Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Docker
+db/data/
+
+# Uploads
+uploads/
+
+# IDE
+.vs/
+.vscode/settings.json
+*.suo
